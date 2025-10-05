@@ -1,10 +1,10 @@
 # Unity generated files
-/[Ll]ibrary/
-/[Tt]emp/
-/[Oo]bj/
-/[Bb]uild/
-/[Bb]uilds/
-/[Ll]ogs/
+Dots/[Ll]ibrary/
+Dots/[Tt]emp/
+Dots/[Oo]bj/
+Dots/[Bb]uild/
+Dots/[Bb]uilds/
+Dots/[Ll]ogs/
 
 # Visual Studio and Rider
 .vs/
@@ -25,16 +25,16 @@
 Thumbs.db
 
 # Unity specific files that can cause conflicts
-Assets/AssetStoreTools/
-Assets/Editor/AssetStoreTools/
+Dots/Assets/AssetStoreTools/
+Dots/Assets/Editor/AssetStoreTools/
 
 # Packages
-Packages/manifest.json.meta
-Packages/packages-lock.json
+Dots/Packages/manifest.json.meta
+Dots/Packages/packages-lock.json
 
 # Local history files
 *.unitypackage
 *.assetbackup
 
 # Crash reports
-CrashReports/
+Dots/CrashReports/
