@@ -1,7 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Player
+[CreateAssetMenu(fileName = "Player", menuName = "Custom/Player")]
+public class Player : ScriptableObject
 {
     public string name;
     public Color color;
