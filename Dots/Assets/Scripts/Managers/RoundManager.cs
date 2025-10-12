@@ -99,24 +99,39 @@ public class RoundManager : MonoBehaviour
                 _dots[(x * gridColumns) + y] = dot;
             }
         }
-
-        _lines = new Line[gridRows * (gridColumns * 2)];
-        // for (int x = 0; x < gridRows; x++)
-        // {
-        //     for (int y = 0; y < gridColumns * 2; y++)
-        //     {
-        //         Line line = Instantiate(linePrefab, row.transform).GetComponent<Line>();
-        //         _lines[(x * (gridColumns * 2)) + y] = line;
-        //     }
-        // }
     }
 
     private void GetClosestDots(float x, float y)
     {
-        int dotX = Mathf.RoundToInt(Mathf.Abs(x - _dots[0].transform.position.x) / _lineLengthX);
-        int dotY = Mathf.RoundToInt(Mathf.Abs(y - _dots[0].transform.position.y) / _lineLengthY);
+        //claim closest dot
+        float dotXFloat = Mathf.Abs(x - _dots[0].transform.position.x) / _lineLengthX;
+        float dotYFloat = Mathf.Abs(y - _dots[0].transform.position.y) / _lineLengthY;
+        int dotX = Mathf.RoundToInt(dotXFloat);
+        int dotY = Mathf.RoundToInt(dotYFloat);
 
         Dot closestDot = _dots[(dotY * gridColumns) + dotX];
         closestDot.SetOwner(CurrentPlayer);
+
+        //claim closest neighbor dot based on axis
+        float dotXDecimal = dotXFloat - Mathf.FloorToInt(dotXFloat);
+        float dotYDecimal = dotYFloat - Mathf.FloorToInt(dotYFloat);
+
+        float dotXF2 = dotXDecimal > .5f ? 1f - dotXDecimal : dotXDecimal;
+        float dotYF2 = dotYDecimal > .5f ? 1f - dotYDecimal : dotYDecimal;
+
+        if (dotXF2 > dotYF2)
+        {
+            dotX = dotXDecimal > .5f ? dotX - 1 : dotX + 1;
+        }
+        else
+        {
+            dotY = dotYDecimal > .5f ? dotY - 1 : dotY + 1;
+        }
+
+
+        Dot secondDot = _dots[(dotY * gridColumns) + dotX];
+        secondDot.SetOwner(CurrentPlayer);
+
+        //build line between
     }
 }
