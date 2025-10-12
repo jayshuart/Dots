@@ -8,6 +8,7 @@ public class RoundManager : MonoBehaviour
 
     [Header("Grid Settings")]
     [SerializeField] private GameObject gridParent;
+    [SerializeField] private GameObject lineParent;
     [SerializeField] private GameObject gridRowPrefab;
     [SerializeField] private int gridRows = 10;
     [SerializeField] private int gridColumns = 10;
@@ -103,6 +104,8 @@ public class RoundManager : MonoBehaviour
 
     private void GetClosestDots(float x, float y)
     {
+        //TODO: cleanup the math on thi func to be more succinct
+
         //claim closest dot
         float dotXFloat = Mathf.Abs(x - _dots[0].transform.position.x) / _lineLengthX;
         float dotYFloat = Mathf.Abs(y - _dots[0].transform.position.y) / _lineLengthY;
@@ -133,5 +136,8 @@ public class RoundManager : MonoBehaviour
         secondDot.SetOwner(CurrentPlayer);
 
         //build line between
+        Line line = Instantiate(linePrefab, lineParent.transform).GetComponent<Line>();
+        line.SetOwner(CurrentPlayer);
+        line.ConnectDots(closestDot, secondDot);
     }
 }

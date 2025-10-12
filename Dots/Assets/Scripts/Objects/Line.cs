@@ -1,12 +1,16 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
+[RequireComponent(typeof(RectTransform))]
+[RequireComponent(typeof(Image))]
 public class Line : MonoBehaviour
 {
     //Properties
     private Player _owner;
-    private Button _lineBtn;
+    private Image _img;
     private Dot[] _dotAnchors;
+    private RectTransform _rt;
 
     public bool Owned
     {
@@ -16,7 +20,13 @@ public class Line : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        _lineBtn = GetComponent<Button>();
+        
+    }
+
+    void Awake()
+    {
+        _img = GetComponent<Image>();
+        _rt = GetComponent<RectTransform>();
         _dotAnchors = new Dot[2];
     }
 
@@ -29,12 +39,37 @@ public class Line : MonoBehaviour
     public void SetOwner(Player owner)
     {
         _owner = owner;
-        _lineBtn.image.color = _owner.color;
-        _lineBtn.interactable = false;
+        _img.color = owner.color;
     }
 
     public void ConnectDots(Dot start, Dot end)
     {
-        
+        //set anchors
+        this._dotAnchors[0] = start;
+        this._dotAnchors[1] = end;
+
+        //calc width/height and if its horizontal or vert- then position and size
+        float dist = Vector3.Distance(start.transform.position, end.transform.position);
+
+
+        bool isHorizontal = start.transform.position.y == end.transform.position.y;
+        Vector3 newPos = start.transform.position;
+        if (isHorizontal)
+        {
+            _rt.sizeDelta = new Vector2(dist, _rt.sizeDelta.y);
+            newPos.x = start.transform.position.x < end.transform.position.x ?
+                newPos.x + (dist / 2) :
+                newPos.x - (dist / 2);
+        }
+        else
+        {
+            _rt.sizeDelta = new Vector2(_rt.sizeDelta.y, dist);
+            newPos.y = start.transform.position.y < end.transform.position.y ?
+                newPos.y + (dist / 2) :
+                newPos.y - (dist / 2);
+        }
+
+        //move to the point between out start-end dots
+        this.transform.position = newPos;
     }
 }
