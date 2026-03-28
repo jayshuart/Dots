@@ -1,3 +1,5 @@
+using System;
+using NUnit.Framework;
 using UnityEngine;
 
 public class RoundManager : MonoBehaviour
@@ -72,8 +74,9 @@ public class RoundManager : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             Vector3 mouseScreenPos = Input.mousePosition;
-            GetClosestDots(mouseScreenPos.x, mouseScreenPos.y);
-            Debug.Log("Left mouse button pressed anywhere on screen!");
+            bool successful = GetClosestDots(mouseScreenPos.x, mouseScreenPos.y);
+
+            if(!successful){ return;  }
             StartNextPlayerTurn();
 
         }
@@ -98,24 +101,29 @@ public class RoundManager : MonoBehaviour
             {
                 Dot dot = Instantiate(dotPrefab, row.transform).GetComponent<Dot>();
                 _dots[(x * gridColumns) + y] = dot;
+                dot.SetCoords(x, y);
             }
         }
+
+        _lines = new Line[(gridRows * gridColumns) + Mathf.CeilToInt(gridColumns / 2)]; 
     }
 
-    private void GetClosestDots(float x, float y)
+    private bool GetClosestDots(float x, float y)
     {
-        //TODO: cleanup the math on thi func to be more succinct
+        //TODO: cleanup the math on this func to be more succinct
 
-        //claim closest dot
+        int lineIndex = 0; //for checking if line we calc is already claimed. dot1s index - dot2s index = line index
+
+        //find closest dot
         float dotXFloat = Mathf.Abs(x - _dots[0].transform.position.x) / _lineLengthX;
         float dotYFloat = Mathf.Abs(y - _dots[0].transform.position.y) / _lineLengthY;
         int dotX = Mathf.RoundToInt(dotXFloat);
         int dotY = Mathf.RoundToInt(dotYFloat);
 
-        Dot closestDot = _dots[(dotY * gridColumns) + dotX];
-        closestDot.SetOwner(CurrentPlayer);
-
-        //claim closest neighbor dot based on axis
+        int closestIndex = (dotY * gridColumns) + dotX;
+        Dot closestDot = _dots[closestIndex];
+        
+        //findclosest neighbor dot based on axis
         float dotXDecimal = dotXFloat - Mathf.FloorToInt(dotXFloat);
         float dotYDecimal = dotYFloat - Mathf.FloorToInt(dotYFloat);
 
@@ -131,13 +139,29 @@ public class RoundManager : MonoBehaviour
             dotY = dotYDecimal > .5f ? dotY - 1 : dotY + 1;
         }
 
+        int secondIndex = (dotY * gridColumns) + dotX;
+        Dot secondDot = _dots[secondIndex];
 
-        Dot secondDot = _dots[(dotY * gridColumns) + dotX];
+        //calc line index -- reuse dotx indexes
+        lineIndex = Math.Abs(closestIndex - secondIndex) / 2;
+        lineIndex  += Math.Max(closestIndex, secondIndex);
+        if(closestDot.coords.x == secondDot.coords.x)
+        {
+            lineIndex += 1;
+        }
+        Debug.Log(lineIndex);
+
+        //claim if possible
+        if (_lines[lineIndex] != null) { return false; } //tell caller this func failed because the tapped line wasnt claimable
         secondDot.SetOwner(CurrentPlayer);
+        closestDot.SetOwner(CurrentPlayer);
 
         //build line between
         Line line = Instantiate(linePrefab, lineParent.transform).GetComponent<Line>();
+        _lines[lineIndex] = line;
         line.SetOwner(CurrentPlayer);
         line.ConnectDots(closestDot, secondDot);
+
+        return true;
     }
 }

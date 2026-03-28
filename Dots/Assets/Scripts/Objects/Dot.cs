@@ -1,12 +1,15 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-[RequireComponent(typeof(Button))]
+[RequireComponent(typeof(Image))]
 public class Dot : MonoBehaviour
 {
     //Properties
     private Player _owner;
-    private Button _dotBtn;
+    private Image _img;
+    public Vector2Int coords = new Vector2Int();
+
+    public Dot[] connections;
 
     public bool Owned{
         get { return _owner != null;}
@@ -15,18 +18,24 @@ public class Dot : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        _dotBtn = GetComponent<Button>();
+        _img = GetComponent<Image>();
+        connections = new Dot[4];
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
+    }
+    
+    public void SetCoords(int x, int y)
+    {
+        coords.x = x;
+        coords.y = y;
     }
 
     public void SetOwner(Player owner){
         _owner = owner;
-        _dotBtn.image.color = _owner.color;
-        _dotBtn.interactable = false;
+        _img.color = _owner.color;
     }
 }
