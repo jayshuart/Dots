@@ -105,7 +105,8 @@ public class RoundManager : MonoBehaviour
             }
         }
 
-        _lines = new Line[(gridRows * gridColumns) + Mathf.CeilToInt(gridColumns / 2)]; 
+        _lines = new Line[( 2 * gridRows * gridColumns) - gridRows - gridColumns]; 
+        Debug.Log(_lines.Length);
     }
 
     private bool GetClosestDots(float x, float y)
@@ -120,8 +121,7 @@ public class RoundManager : MonoBehaviour
         int dotX = Mathf.RoundToInt(dotXFloat);
         int dotY = Mathf.RoundToInt(dotYFloat);
 
-        int closestIndex = (dotY * gridColumns) + dotX;
-        Dot closestDot = _dots[closestIndex];
+        Dot closestDot = _dots[(dotY * gridColumns) + dotX];
         
         //findclosest neighbor dot based on axis
         float dotXDecimal = dotXFloat - Mathf.FloorToInt(dotXFloat);
@@ -139,17 +139,21 @@ public class RoundManager : MonoBehaviour
             dotY = dotYDecimal > .5f ? dotY - 1 : dotY + 1;
         }
 
-        int secondIndex = (dotY * gridColumns) + dotX;
-        Dot secondDot = _dots[secondIndex];
+        Dot secondDot = _dots[(dotY * gridColumns) + dotX];
 
-        //calc line index -- reuse dotx indexes
-        lineIndex = Math.Abs(closestIndex - secondIndex) / 2;
-        lineIndex  += Math.Max(closestIndex, secondIndex);
-        if(closestDot.coords.x == secondDot.coords.x)
+        //calc line index -- a modified approach to the dot formula
+        if (closestDot.coords.x == secondDot.coords.x)
         {
-            lineIndex += 1;
+            dotX = Mathf.RoundToInt(Mathf.Abs(x - _dots[0].transform.position.x + (_lineLengthX / 2)) / _lineLengthX);
+            dotY = Mathf.RoundToInt(Mathf.Abs(y - _dots[0].transform.position.y) / _lineLengthY);
+            lineIndex = (dotY * (gridColumns - 1)) + dotX - 1;
         }
-        Debug.Log(lineIndex);
+        else
+        {
+            dotX = Mathf.RoundToInt(Mathf.Abs(x - _dots[0].transform.position.x) / _lineLengthX);
+            dotY = Mathf.RoundToInt(Mathf.Abs(y - _dots[0].transform.position.y + (_lineLengthY / 2)) / _lineLengthY);
+            lineIndex = ((gridColumns - 1) * gridRows) + (dotY * gridColumns) + dotX;
+        }
 
         //claim if possible
         if (_lines[lineIndex] != null) { return false; } //tell caller this func failed because the tapped line wasnt claimable
