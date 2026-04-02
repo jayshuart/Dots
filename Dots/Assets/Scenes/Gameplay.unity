@@ -408,8 +408,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 108e12cc7224bb1408803cd214ba50de, type: 2}
   dotPrefab: {fileID: 1990943919235815372, guid: fe74a0defdb7159469779e904baeafe2, type: 3}
   linePrefab: {fileID: 9077127991313780969, guid: 7548548ee36a3c34c8c7c20d5ceb4df3, type: 3}
+  boxFillPrefab: {fileID: 4834614072894023744, guid: 6056ecf53e2d6fa4a8d27bf087d43b90, type: 3}
   gridParent: {fileID: 6982338125161509044}
   lineParent: {fileID: 1360310565}
+  boxFillParent: {fileID: 6982338125161509045}
   gridRowPrefab: {fileID: 2060402095773379547, guid: a41b0a11acc34d546ac7f2b30c5c3dab, type: 3}
   gridRows: 10
   gridColumns: 10
@@ -709,6 +711,11 @@ RectTransform:
 --- !u!1 &6982338125161509044 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2194147855525656190, guid: 333d8962bc1237242bb7fef6093f7374, type: 3}
+  m_PrefabInstance: {fileID: 6982338125161509042}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &6982338125161509045 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 466600606228221949, guid: 333d8962bc1237242bb7fef6093f7374, type: 3}
   m_PrefabInstance: {fileID: 6982338125161509042}
   m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807

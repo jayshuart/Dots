@@ -7,10 +7,12 @@ public class RoundManager : MonoBehaviour
     public Player[] players;
     [SerializeField] private GameObject dotPrefab;
     [SerializeField] private GameObject linePrefab;
+    [SerializeField] private GameObject boxFillPrefab;
 
     [Header("Grid Settings")]
     [SerializeField] private GameObject gridParent;
     [SerializeField] private GameObject lineParent;
+    [SerializeField] private GameObject boxFillParent;
     [SerializeField] private GameObject gridRowPrefab;
     [SerializeField] private int gridRows = 10;
     [SerializeField] private int gridColumns = 10;
@@ -18,6 +20,7 @@ public class RoundManager : MonoBehaviour
     //private props
     private Dot[] _dots;
     private Line[] _lines;
+    private BoxFill[] _areas;
     private int _currentPlayerIndex = 0;
 
     //public get/sets
@@ -92,8 +95,8 @@ public class RoundManager : MonoBehaviour
 
     private void BuildGrid()
     {
+        //build dots
         _dots = new Dot[gridRows * gridColumns];
-
         for (int x = 0; x < gridRows; x++)
         {
             GameObject row = Instantiate(gridRowPrefab, gridParent.transform);
@@ -105,8 +108,29 @@ public class RoundManager : MonoBehaviour
             }
         }
 
-        _lines = new Line[( 2 * gridRows * gridColumns) - gridRows - gridColumns]; 
-        Debug.Log(_lines.Length);
+        //force layout group to apply on all the dots so they are positioned properly and calcs like lineLength are correct
+        UnityEngine.UI.LayoutRebuilder.ForceRebuildLayoutImmediate(this.gridParent.GetComponent<RectTransform>());
+
+        //generate lines array, we'll arrange these as players play.
+        _lines = new Line[(2 * gridRows * gridColumns) - gridRows - gridColumns];
+
+        //build fill areas to be claimed when all 4 lines are closed.
+        _areas = new BoxFill[(gridRows - 1) * (gridColumns - 1)];
+        for (int x = 0; x < gridRows - 1; x++)
+        {
+            for (int y = 0; y < gridColumns - 1; y++)
+            {
+                BoxFill boxFill = Instantiate(boxFillPrefab, boxFillParent.transform).GetComponent<BoxFill>();
+                boxFill.SetSize(_lineLengthY, _lineLengthY);
+
+                Vector3 pos = _dots[0].transform.position;
+                pos.x += (_lineLengthX / 2) + (_lineLengthX * x);
+                pos.y -= (_lineLengthY / 2) + (_lineLengthY * y);
+                boxFill.transform.position = pos;
+
+                _areas[(x * (gridColumns - 1)) + y] = boxFill;
+            }
+        }
     }
 
     private bool GetClosestDots(float x, float y)
@@ -165,6 +189,12 @@ public class RoundManager : MonoBehaviour
         _lines[lineIndex] = line;
         line.SetOwner(CurrentPlayer);
         line.ConnectDots(closestDot, secondDot);
+
+        //claim area if possible
+        dotX = Mathf.RoundToInt(Mathf.Abs(x - _areas[0].transform.position.x) / _lineLengthX);
+        dotY = Mathf.RoundToInt(Mathf.Abs(y - _areas[0].transform.position.y) / _lineLengthY);
+        int index = (dotY * (gridColumns - 1)) + dotX;
+        _areas[index].SetOwner(CurrentPlayer);
 
         return true;
     }
