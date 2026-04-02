@@ -121,7 +121,7 @@ public class RoundManager : MonoBehaviour
             for (int y = 0; y < gridColumns - 1; y++)
             {
                 BoxFill boxFill = Instantiate(boxFillPrefab, boxFillParent.transform).GetComponent<BoxFill>();
-                boxFill.SetSize(_lineLengthY, _lineLengthY);
+                boxFill.SetSize(_lineLengthX, _lineLengthY);
 
                 Vector3 pos = _dots[0].transform.position;
                 pos.x += (_lineLengthX / 2) + (_lineLengthX * x);
@@ -136,8 +136,6 @@ public class RoundManager : MonoBehaviour
     private bool GetClosestDots(float x, float y)
     {
         //TODO: cleanup the math on this func to be more succinct
-
-        int lineIndex = 0; //for checking if line we calc is already claimed. dot1s index - dot2s index = line index
 
         //find closest dot
         float dotXFloat = Mathf.Abs(x - _dots[0].transform.position.x) / _lineLengthX;
@@ -165,7 +163,8 @@ public class RoundManager : MonoBehaviour
 
         Dot secondDot = _dots[(dotY * gridColumns) + dotX];
 
-        //calc line index -- a modified approach to the dot formula
+        //calc line index
+        int lineIndex;
         if (closestDot.coords.x == secondDot.coords.x)
         {
             dotX = Mathf.RoundToInt(Mathf.Abs(x - _dots[0].transform.position.x + (_lineLengthX / 2)) / _lineLengthX);
@@ -193,7 +192,7 @@ public class RoundManager : MonoBehaviour
         //claim area if possible
         dotX = Mathf.RoundToInt(Mathf.Abs(x - _areas[0].transform.position.x) / _lineLengthX);
         dotY = Mathf.RoundToInt(Mathf.Abs(y - _areas[0].transform.position.y) / _lineLengthY);
-        int index = (dotY * (gridColumns - 1)) + dotX;
+        int index = (dotX * (gridColumns - 1)) + dotY;
         _areas[index].SetOwner(CurrentPlayer);
 
         return true;
