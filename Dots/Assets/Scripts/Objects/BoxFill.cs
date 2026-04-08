@@ -41,43 +41,13 @@ public class BoxFill : MonoBehaviour
     public void SetOwner(Player owner)
     {
         _owner = owner;
-        _img.color = owner.color;
+        Color color = owner.color;
+        color.a = .75f;
+        _img.color = color;
     }
 
     public void SetSize(float width, float height)
     {
         _rt.sizeDelta = new UnityEngine.Vector2(width, height);
-    }
-
-    public void ConnectDots(Dot[] corners)
-    {
-        float width = 0;
-        float height = 0;
-        UnityEngine.Vector2 pos = new UnityEngine.Vector2(0, 0);
-
-        for (int i = 0; i < corners.Length; i++)
-        {
-            //add onto pos so we can find the midpoint
-            pos.x += corners[i].transform.position.x;
-            pos.y += corners[i].transform.position.y;
-
-            //calc width/height
-            if (i > 0)
-            {
-                if (width > 0)
-                { width = Mathf.Abs(corners[0].transform.position.x - corners[i].transform.position.x); }
-
-                if (height > 0)
-                { height = Mathf.Abs(corners[0].transform.position.y - corners[i].transform.position.y); }
-            }
-        }
-
-        //find average pos
-        pos.x /= corners.Length;
-        pos.y /= corners.Length;
-
-        //place box and size
-        this.transform.position = pos;
-        _rt.sizeDelta.Set(width, height);
     }
 }
