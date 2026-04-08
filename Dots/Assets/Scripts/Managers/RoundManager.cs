@@ -1,5 +1,3 @@
-using System;
-using NUnit.Framework;
 using UnityEngine;
 
 public class RoundManager : MonoBehaviour
@@ -34,7 +32,7 @@ public class RoundManager : MonoBehaviour
         get { return Mathf.Abs(_dots[1].transform.position.x - _dots[0].transform.position.x);  }
     }
     private float _lineLengthY{
-        get { return Mathf.Abs(_dots[gridColumns].transform.position.y - _dots[0].transform.position.y);  }
+        get { return Mathf.Abs(_dots[gridRows].transform.position.y - _dots[0].transform.position.y);  }
     }
 
     //make round manager singleton
@@ -77,11 +75,18 @@ public class RoundManager : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             Vector3 mouseScreenPos = Input.mousePosition;
-            bool successful = GetClosestDots(mouseScreenPos.x, mouseScreenPos.y);
+            bool successful = ClaimClosestLine(mouseScreenPos.x, mouseScreenPos.y);
+            if (!successful) { return; }
 
-            if(!successful){ return;  }
-            StartNextPlayerTurn();
-
+            successful = ClaimClosestArea(mouseScreenPos.x, mouseScreenPos.y);
+            if (successful)
+            {
+                BonusTurn();
+            }
+            else
+            {
+                StartNextPlayerTurn();
+            }
         }
     }
 
@@ -93,17 +98,24 @@ public class RoundManager : MonoBehaviour
         //todo trigger ui change to showcase this
     }
 
+    private void BonusTurn()
+    {
+        Debug.Log("Bonus Turn: " + CurrentPlayer.name);
+
+        //todo trigger ui to celebrate
+    }
+
     private void BuildGrid()
     {
         //build dots
         _dots = new Dot[gridRows * gridColumns];
-        for (int x = 0; x < gridRows; x++)
+        for (int y = 0; y < gridRows; y++)
         {
             GameObject row = Instantiate(gridRowPrefab, gridParent.transform);
-            for (int y = 0; y < gridColumns; y++)
+            for (int x = 0; x < gridColumns; x++)
             {
                 Dot dot = Instantiate(dotPrefab, row.transform).GetComponent<Dot>();
-                _dots[(x * gridColumns) + y] = dot;
+                _dots[(y * gridRows) + x] = dot;
                 dot.SetCoords(x, y);
             }
         }
@@ -116,9 +128,9 @@ public class RoundManager : MonoBehaviour
 
         //build fill areas to be claimed when all 4 lines are closed.
         _areas = new BoxFill[(gridRows - 1) * (gridColumns - 1)];
-        for (int x = 0; x < gridRows - 1; x++)
+        for (int y = 0; y < gridRows - 1; y++)
         {
-            for (int y = 0; y < gridColumns - 1; y++)
+            for (int x = 0; x < gridColumns - 1; x++)
             {
                 BoxFill boxFill = Instantiate(boxFillPrefab, boxFillParent.transform).GetComponent<BoxFill>();
                 boxFill.SetSize(_lineLengthX, _lineLengthY);
@@ -128,73 +140,104 @@ public class RoundManager : MonoBehaviour
                 pos.y -= (_lineLengthY / 2) + (_lineLengthY * y);
                 boxFill.transform.position = pos;
 
-                _areas[(x * (gridColumns - 1)) + y] = boxFill;
+                _areas[(y * (gridRows - 1)) + x] = boxFill;
             }
         }
     }
 
-    private bool GetClosestDots(float x, float y)
+    private bool ClaimClosestLine(float x, float y)
     {
-        //TODO: cleanup the math on this func to be more succinct
+        //find dots in line
+        Dot closestDot = GetClosestDot(x, y);
+        Dot secondDot = GetSecondClosestDotInLine(x, y);
 
-        //find closest dot
-        float dotXFloat = Mathf.Abs(x - _dots[0].transform.position.x) / _lineLengthX;
-        float dotYFloat = Mathf.Abs(y - _dots[0].transform.position.y) / _lineLengthY;
-        int dotX = Mathf.RoundToInt(dotXFloat);
-        int dotY = Mathf.RoundToInt(dotYFloat);
-
-        Dot closestDot = _dots[(dotY * gridColumns) + dotX];
-        
-        //findclosest neighbor dot based on axis
-        float dotXDecimal = dotXFloat - Mathf.FloorToInt(dotXFloat);
-        float dotYDecimal = dotYFloat - Mathf.FloorToInt(dotYFloat);
-
-        float dotXF2 = dotXDecimal > .5f ? 1f - dotXDecimal : dotXDecimal;
-        float dotYF2 = dotYDecimal > .5f ? 1f - dotYDecimal : dotYDecimal;
-
-        if (dotXF2 > dotYF2)
-        {
-            dotX = dotXDecimal > .5f ? dotX - 1 : dotX + 1;
-        }
-        else
-        {
-            dotY = dotYDecimal > .5f ? dotY - 1 : dotY + 1;
-        }
-
-        Dot secondDot = _dots[(dotY * gridColumns) + dotX];
-
-        //calc line index
-        int lineIndex;
-        if (closestDot.coords.x == secondDot.coords.x)
-        {
-            dotX = Mathf.RoundToInt(Mathf.Abs(x - _dots[0].transform.position.x + (_lineLengthX / 2)) / _lineLengthX);
-            dotY = Mathf.RoundToInt(Mathf.Abs(y - _dots[0].transform.position.y) / _lineLengthY);
-            lineIndex = (dotY * (gridColumns - 1)) + dotX - 1;
-        }
-        else
-        {
-            dotX = Mathf.RoundToInt(Mathf.Abs(x - _dots[0].transform.position.x) / _lineLengthX);
-            dotY = Mathf.RoundToInt(Mathf.Abs(y - _dots[0].transform.position.y + (_lineLengthY / 2)) / _lineLengthY);
-            lineIndex = ((gridColumns - 1) * gridRows) + (dotY * gridColumns) + dotX;
-        }
-
-        //claim if possible
+        //claim line if possible
+        int lineIndex = GetClosestLineIndex(x, y, closestDot, secondDot);
         if (_lines[lineIndex] != null) { return false; } //tell caller this func failed because the tapped line wasnt claimable
-        secondDot.SetOwner(CurrentPlayer);
-        closestDot.SetOwner(CurrentPlayer);
+        
 
         //build line between
         Line line = Instantiate(linePrefab, lineParent.transform).GetComponent<Line>();
         _lines[lineIndex] = line;
         line.SetOwner(CurrentPlayer);
         line.ConnectDots(closestDot, secondDot);
-
-        //claim area if possible
-        dotX = Mathf.RoundToInt(Mathf.Abs(x - _areas[0].transform.position.x) / _lineLengthX);
-        dotY = Mathf.RoundToInt(Mathf.Abs(y - _areas[0].transform.position.y) / _lineLengthY);
-        int index = (dotX * (gridColumns - 1)) + dotY;
-        _areas[index].SetOwner(CurrentPlayer);
-
         return true;
+    }
+
+    private bool ClaimClosestArea(float x, float y)
+    {
+        //claim area if possible
+        BoxFill area = GetClosestArea(x, y);
+        area.SetOwner(CurrentPlayer);
+        return true;
+    }
+
+    private Dot GetClosestDot(float x, float y)
+    {
+        //find closest dot
+        int dotX = Mathf.RoundToInt(Mathf.Abs(x - _dots[0].transform.position.x) / _lineLengthX);
+        int dotY = Mathf.RoundToInt(Mathf.Abs(y - _dots[0].transform.position.y) / _lineLengthY);
+
+        return _dots[(dotY * gridRows) + dotX];
+    }
+
+    private Dot GetSecondClosestDotInLine(float x, float y)
+    {
+        float dotXFloat = Mathf.Abs(x - _dots[0].transform.position.x) / _lineLengthX;
+        float dotYFloat = Mathf.Abs(y - _dots[0].transform.position.y) / _lineLengthY;
+
+        int dotX = Mathf.RoundToInt(dotXFloat);
+        int dotY = Mathf.RoundToInt(dotYFloat);
+        
+        float dotXF2 = dotXFloat % 1 > .5f ? 1f - dotXFloat % 1 : dotXFloat % 1;
+        float dotYF2 = dotYFloat % 1 > .5f ? 1f - dotYFloat % 1 : dotYFloat % 1;
+
+        if (dotXF2 > dotYF2) //is x axis from baseline larger than y axis from y baseline?
+        {
+            dotX = dotXFloat % 1 > .5 ? (dotX - 1) : (dotX + 1);
+        }
+        else
+        {
+            dotY = dotYFloat % 1 > .5 ? (dotY - 1) : (dotY + 1);
+        }
+
+        return _dots[(dotY * gridRows) + dotX];
+    }
+
+    private int GetClosestLineIndex(float x, float y, Dot closestDot = null, Dot secondDot = null)
+    {
+        closestDot = closestDot ?? GetClosestDot(x, y);
+        secondDot = secondDot ?? GetSecondClosestDotInLine(x, y);
+
+        int lineIndex, dotX, dotY;
+        if (closestDot.coords.x == secondDot.coords.x)
+        {
+            dotX = Mathf.RoundToInt(Mathf.Abs(x - _dots[0].transform.position.x + (_lineLengthX / 2)) / _lineLengthX);
+            dotY = Mathf.RoundToInt(Mathf.Abs(y - _dots[0].transform.position.y) / _lineLengthY);
+            lineIndex = (dotY * (gridRows - 1)) + dotX - 1;
+        }
+        else
+        {
+            dotX = Mathf.RoundToInt(Mathf.Abs(x - _dots[0].transform.position.x) / _lineLengthX);
+            dotY = Mathf.RoundToInt(Mathf.Abs(y - _dots[0].transform.position.y + (_lineLengthY / 2)) / _lineLengthY);
+            lineIndex = ((gridRows - 1) * gridRows) + (dotY * gridRows) + dotX;
+        }
+
+        secondDot.SetOwner(CurrentPlayer);
+        closestDot.SetOwner(CurrentPlayer);
+
+        return lineIndex;
+    }
+
+    private Line GetClosestLine(float x, float y)
+    {
+        return _lines[GetClosestLineIndex(x, y)];
+    }
+    
+    private BoxFill GetClosestArea(float x, float y)
+    {
+        int dotX = Mathf.RoundToInt(Mathf.Abs(x - _areas[0].transform.position.x) / _lineLengthX);
+        int dotY = Mathf.RoundToInt(Mathf.Abs(y - _areas[0].transform.position.y) / _lineLengthY);
+        return _areas[(dotY * (gridRows - 1)) + dotX];
     }
 }
