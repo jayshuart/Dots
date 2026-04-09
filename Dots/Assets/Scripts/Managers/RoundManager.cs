@@ -210,17 +210,17 @@ public class RoundManager : MonoBehaviour
         secondDot = secondDot ?? GetSecondClosestDotInLine(x, y);
 
         int lineIndex, dotX, dotY;
-        if (closestDot.coords.x == secondDot.coords.x)
+        if (closestDot.coords.y == secondDot.coords.y)
         {
-            dotX = Mathf.RoundToInt(Mathf.Abs(x - _dots[0].transform.position.x + (_lineLengthX / 2)) / _lineLengthX);
+            dotX = Mathf.RoundToInt(Mathf.Abs(x - _dots[0].transform.position.x - (_lineLengthX / 2)) / _lineLengthX);
             dotY = Mathf.RoundToInt(Mathf.Abs(y - _dots[0].transform.position.y) / _lineLengthY);
-            lineIndex = (dotY * (gridRows - 1)) + dotX - 1;
+            lineIndex = (dotY * (gridRows - 1)) + dotX;
         }
         else
         {
             dotX = Mathf.RoundToInt(Mathf.Abs(x - _dots[0].transform.position.x) / _lineLengthX);
-            dotY = Mathf.RoundToInt(Mathf.Abs(y - _dots[0].transform.position.y + (_lineLengthY / 2)) / _lineLengthY);
-            lineIndex = ((gridRows - 1) * gridRows) + (dotY * gridRows) + dotX;
+            dotY = Mathf.RoundToInt(Mathf.Abs(y - _dots[0].transform.position.y - (_lineLengthY / 2)) / _lineLengthY);
+            lineIndex = ((gridRows - 1) * (gridColumns - 1)) + (dotY * (gridRows - 1)) + dotX;
         }
 
         secondDot.SetOwner(CurrentPlayer);
