@@ -1,3 +1,4 @@
+using Unity.Collections;
 using UnityEngine;
 
 public class RoundManager : MonoBehaviour
@@ -74,12 +75,27 @@ public class RoundManager : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
+            //check if we claimed a valid line
             Vector3 mouseScreenPos = Input.mousePosition;
-            bool successful = ClaimClosestLine(mouseScreenPos.x, mouseScreenPos.y);
-            if (!successful) { return; }
+            (int, bool) successfulLine = ClaimClosestLine(mouseScreenPos.x, mouseScreenPos.y);
+            if (!successfulLine.Item2) { return; }
 
-            successful = ClaimClosestArea(mouseScreenPos.x, mouseScreenPos.y);
-            if (successful)
+            //check if that line closed off any areas
+            Line closestLine = _lines[successfulLine.Item1];
+            bool areaFirstSuccess, areaSecondSuccess; //do these checks speratly so the claim func fores for both if needed
+            if (closestLine.IsVertical)
+            {
+                areaFirstSuccess = ClaimClosestArea(closestLine.transform.position.x - (_lineLengthX / 2), closestLine.transform.position.y);
+                areaSecondSuccess = ClaimClosestArea(closestLine.transform.position.x + (_lineLengthX / 2), closestLine.transform.position.y);
+            }
+            else
+            {
+                areaFirstSuccess = ClaimClosestArea(closestLine.transform.position.x, closestLine.transform.position.y - (_lineLengthY / 2));
+                areaSecondSuccess = ClaimClosestArea(closestLine.transform.position.x, closestLine.transform.position.y + (_lineLengthY / 2));
+            }
+
+            //if we claimed an area, get another turn
+            if (areaFirstSuccess || areaSecondSuccess)
             {
                 BonusTurn();
             }
@@ -145,7 +161,7 @@ public class RoundManager : MonoBehaviour
         }
     }
 
-    private bool ClaimClosestLine(float x, float y)
+    private (int, bool) ClaimClosestLine(float x, float y)
     {
         //find dots in line
         Dot closestDot = GetClosestDot(x, y);
@@ -153,23 +169,47 @@ public class RoundManager : MonoBehaviour
 
         //claim line if possible
         int lineIndex = GetClosestLineIndex(x, y, closestDot, secondDot);
-        if (_lines[lineIndex] != null) { return false; } //tell caller this func failed because the tapped line wasnt claimable
-        
+        if (_lines[lineIndex] != null) { return (lineIndex, false); } //tell caller this func failed because the tapped line wasnt claimable
+
 
         //build line between
         Line line = Instantiate(linePrefab, lineParent.transform).GetComponent<Line>();
         _lines[lineIndex] = line;
-        line.SetOwner(CurrentPlayer);
         line.ConnectDots(closestDot, secondDot);
-        return true;
+
+        // secondDot.SetOwner(CurrentPlayer);
+        // closestDot.SetOwner(CurrentPlayer);
+        line.SetOwner(CurrentPlayer);
+
+        return (lineIndex, true);
     }
 
     private bool ClaimClosestArea(float x, float y)
     {
-        //claim area if possible
+        //find closest areas
         BoxFill area = GetClosestArea(x, y);
-        area.SetOwner(CurrentPlayer);
-        return true;
+
+        //check surrounding lines for being claimed
+        Dot[] dots = {
+            GetClosestDot(area.transform.position.x - _lineLengthX / 2, area.transform.position.y - _lineLengthY / 2), //0 - bottom left
+            GetClosestDot(area.transform.position.x - _lineLengthX / 2, area.transform.position.y + _lineLengthY / 2), //1 - top left
+            GetClosestDot(area.transform.position.x + _lineLengthX / 2, area.transform.position.y - _lineLengthY / 2), //2 - bottom right
+            GetClosestDot(area.transform.position.x + _lineLengthX / 2, area.transform.position.y + _lineLengthY / 2) //3 - top right
+        };
+
+        //now check they are properly connected
+        if(dots[1].connections[1] == dots[3] &&
+        dots[1].connections[2] == dots[0] &&
+        dots[2].connections[0] == dots[3] && 
+        dots[2].connections[3] == dots[0])
+        {
+            //if so, set owner and return the claim successful
+            area.SetOwner(CurrentPlayer);
+            return true;
+        }
+
+        //fallback, failed claiming
+        return false;
     }
 
     private Dot GetClosestDot(float x, float y)
@@ -223,9 +263,6 @@ public class RoundManager : MonoBehaviour
             lineIndex = ((gridRows - 1) * (gridColumns - 1)) + (dotY * (gridRows - 1)) + dotX;
         }
 
-        secondDot.SetOwner(CurrentPlayer);
-        closestDot.SetOwner(CurrentPlayer);
-
         return lineIndex;
     }
 
@@ -233,7 +270,7 @@ public class RoundManager : MonoBehaviour
     {
         return _lines[GetClosestLineIndex(x, y)];
     }
-    
+
     private BoxFill GetClosestArea(float x, float y)
     {
         int dotX = Mathf.RoundToInt(Mathf.Abs(x - _areas[0].transform.position.x) / _lineLengthX);

@@ -17,6 +17,11 @@ public class Line : MonoBehaviour
         get { return _owner != null; }
     }
 
+    public bool IsVertical
+    {
+        get { return Owned && _dotAnchors[0].coords.x == _dotAnchors[1].coords.x;  }
+    }
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -47,6 +52,9 @@ public class Line : MonoBehaviour
         //set anchors
         this._dotAnchors[0] = start;
         this._dotAnchors[1] = end;
+
+        start.Connect(end);
+        end.Connect(start);
 
         //calc width/height and if its horizontal or vert- then position and size
         float dist = Vector3.Distance(start.transform.position, end.transform.position);
