@@ -17,15 +17,19 @@ public class RoundManager : MonoBehaviour
     [SerializeField] private int gridColumns = 10;
 
     //private props
+    private RoundPlayer[] _roundPlayers;
     private Dot[] _dots;
     private Line[] _lines;
     private BoxFill[] _areas;
+
+    //round control propers
     private int _currentPlayerIndex = 0;
+    private int[] _scores = {0, 0};
 
     //public get/sets
-    public Player CurrentPlayer
+    public RoundPlayer CurrentPlayer
     {
-        get { return players[_currentPlayerIndex]; }
+        get { return _roundPlayers[_currentPlayerIndex]; }
     }
 
     //private get/sets
@@ -56,8 +60,18 @@ public class RoundManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-
+        PrepareRound();
         BuildGrid();
+    }
+
+    private void PrepareRound()
+    {
+        _roundPlayers = new RoundPlayer[players.Length];
+        for(int i = 0; i < players.Length; i++)
+        {
+            _roundPlayers[i] = ScriptableObject.CreateInstance<RoundPlayer>();
+            _roundPlayers[i].player = players[i];
+        }
     }
 
     // Update is called once per frame
@@ -97,7 +111,7 @@ public class RoundManager : MonoBehaviour
             //if we claimed an area, get another turn
             if (areaFirstSuccess || areaSecondSuccess)
             {
-                BonusTurn();
+                OnScoringMove();
             }
             else
             {
@@ -109,16 +123,15 @@ public class RoundManager : MonoBehaviour
     private void StartNextPlayerTurn()
     {
         _currentPlayerIndex = (_currentPlayerIndex + 1) % players.Length;
-        Debug.Log("Current Player: " + CurrentPlayer.name);
+        Debug.Log("Current Player: " + CurrentPlayer.player.name);
 
         //todo trigger ui change to showcase this
     }
 
-    private void BonusTurn()
+    private void OnScoringMove()
     {
-        Debug.Log("Bonus Turn: " + CurrentPlayer.name);
-
         //todo trigger ui to celebrate
+        Debug.Log("Bonus Turn: " + CurrentPlayer.player.name);
     }
 
     private void BuildGrid()
@@ -177,9 +190,9 @@ public class RoundManager : MonoBehaviour
         _lines[lineIndex] = line;
         line.ConnectDots(closestDot, secondDot);
 
-        // secondDot.SetOwner(CurrentPlayer);
-        // closestDot.SetOwner(CurrentPlayer);
-        line.SetOwner(CurrentPlayer);
+        // secondDot.SetOwner(CurrentPlayer.player);
+        // closestDot.SetOwner(CurrentPlayer.player);
+        line.SetOwner(CurrentPlayer.player);
 
         return (lineIndex, true);
     }
@@ -204,7 +217,8 @@ public class RoundManager : MonoBehaviour
         dots[2].connections[3] == dots[0])
         {
             //if so, set owner and return the claim successful
-            area.SetOwner(CurrentPlayer);
+            area.SetOwner(CurrentPlayer.player);
+            GivePoint(CurrentPlayer);
             return true;
         }
 
@@ -276,5 +290,12 @@ public class RoundManager : MonoBehaviour
         int dotX = Mathf.RoundToInt(Mathf.Abs(x - _areas[0].transform.position.x) / _lineLengthX);
         int dotY = Mathf.RoundToInt(Mathf.Abs(y - _areas[0].transform.position.y) / _lineLengthY);
         return _areas[(dotY * (gridRows - 1)) + dotX];
+    }
+
+    // -- scoring
+    private void GivePoint(RoundPlayer player)
+    {
+        CurrentPlayer.score++;
+        Debug.Log(CurrentPlayer.player.name + " Score: " + CurrentPlayer.score);
     }
 }
