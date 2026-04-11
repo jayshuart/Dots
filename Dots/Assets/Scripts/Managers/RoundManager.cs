@@ -24,7 +24,7 @@ public class RoundManager : MonoBehaviour
 
     //round control propers
     private int _currentPlayerIndex = 0;
-    private int[] _scores = {0, 0};
+    private int _areasLeft; //how many areas until gameover?
 
     //public get/sets
     public RoundPlayer CurrentPlayer
@@ -60,18 +60,22 @@ public class RoundManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        PrepareRound();
         BuildGrid();
+        PrepareRound();
     }
 
     private void PrepareRound()
     {
+        //generate players with scoring and extra features from our absic player data
         _roundPlayers = new RoundPlayer[players.Length];
-        for(int i = 0; i < players.Length; i++)
+        for (int i = 0; i < players.Length; i++)
         {
             _roundPlayers[i] = ScriptableObject.CreateInstance<RoundPlayer>();
             _roundPlayers[i].player = players[i];
         }
+
+        //determine how many areas are claimable
+        _areasLeft = _areas.Length;
     }
 
     // Update is called once per frame
@@ -211,13 +215,14 @@ public class RoundManager : MonoBehaviour
         };
 
         //now check they are properly connected
-        if(dots[1].connections[1] == dots[3] &&
+        if (dots[1].connections[1] == dots[3] &&
         dots[1].connections[2] == dots[0] &&
-        dots[2].connections[0] == dots[3] && 
+        dots[2].connections[0] == dots[3] &&
         dots[2].connections[3] == dots[0])
         {
             //if so, set owner and return the claim successful
             area.SetOwner(CurrentPlayer.player);
+            _areasLeft--;
             GivePoint(CurrentPlayer);
             return true;
         }
