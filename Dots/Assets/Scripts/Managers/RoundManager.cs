@@ -94,7 +94,8 @@ public class RoundManager : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             //check if we claimed a valid line
-            Vector3 mouseScreenPos = Input.mousePosition;
+            Vector2 mouseScreenPos = ClampPosToDots((Vector2) Input.mousePosition);
+
             (int, bool) successfulLine = ClaimClosestLine(mouseScreenPos.x, mouseScreenPos.y);
             if (!successfulLine.Item2) { return; }
 
@@ -157,7 +158,7 @@ public class RoundManager : MonoBehaviour
         UnityEngine.UI.LayoutRebuilder.ForceRebuildLayoutImmediate(this.gridParent.GetComponent<RectTransform>());
 
         //generate lines array, we'll arrange these as players play.
-        _lines = new Line[(2 * gridRows * gridColumns) - gridRows - gridColumns];
+        _lines = new Line[(2 * gridRows * gridColumns) - gridRows - gridColumns + 1];
 
         //build fill areas to be claimed when all 4 lines are closed.
         _areas = new BoxFill[(gridRows - 1) * (gridColumns - 1)];
@@ -279,7 +280,7 @@ public class RoundManager : MonoBehaviour
         {
             dotX = Mathf.RoundToInt(Mathf.Abs(x - _dots[0].transform.position.x) / _lineLengthX);
             dotY = Mathf.RoundToInt(Mathf.Abs(y - _dots[0].transform.position.y - (_lineLengthY / 2)) / _lineLengthY);
-            lineIndex = ((gridRows - 1) * (gridColumns - 1)) + (dotY * (gridRows - 1)) + dotX;
+            lineIndex = ((gridRows - 1) * (gridColumns - 1)) + (dotY * gridRows) + dotX;
         }
 
         return lineIndex;
@@ -294,7 +295,9 @@ public class RoundManager : MonoBehaviour
     {
         int dotX = Mathf.RoundToInt(Mathf.Abs(x - _areas[0].transform.position.x) / _lineLengthX);
         int dotY = Mathf.RoundToInt(Mathf.Abs(y - _areas[0].transform.position.y) / _lineLengthY);
-        return _areas[(dotY * (gridRows - 1)) + dotX];
+        int index = (dotY * (gridRows - 1)) + dotX;
+        index = Mathf.Clamp(index, 0, _areas.Length - 1);
+        return _areas[index];
     }
 
     // -- scoring
@@ -302,5 +305,19 @@ public class RoundManager : MonoBehaviour
     {
         CurrentPlayer.score++;
         Debug.Log(CurrentPlayer.player.name + " Score: " + CurrentPlayer.score);
+    }
+
+    // -- Helper funs
+    private Vector2 ClampPosToDots(float x, float y)
+    {
+        return new Vector2(
+            Mathf.Clamp(x, _dots[0].transform.position.x, _dots[_dots.Length - 1].transform.position.x),
+            Mathf.Clamp(y, _dots[_dots.Length - 1].transform.position.y, _dots[0].transform.position.y)
+        );
+    }
+
+    private Vector2 ClampPosToDots(Vector2 pos)
+    {
+        return ClampPosToDots(pos.x, pos.y);
     }
 }
