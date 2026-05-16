@@ -135,8 +135,41 @@ public class RoundManager : MonoBehaviour
 
     private void OnScoringMove()
     {
-        //todo trigger ui to celebrate
-        Debug.Log("Bonus Turn: " + CurrentPlayer.player.name);
+        //check if all areas have been claimed
+        if(_areasLeft <= 0)
+        {
+            OnRoundOver();
+        }
+        else
+        {
+            //todo trigger ui to celebrate
+            Debug.Log("Bonus Turn: " + CurrentPlayer.player.name);
+        }
+    }
+
+    private void OnRoundOver()
+    {
+        Debug.Log("--------------------------------------------------------------");
+        Debug.Log("[Final Scores]");
+        Debug.Log("(" + _roundPlayers[0].name + ") " + _roundPlayers[0].score + " || " + _roundPlayers[1].score + " (" + _roundPlayers[1].name + ")");
+
+
+        //see who won base don number of areas owned
+        if (_roundPlayers[0].score == _roundPlayers[1].score) //tie
+        {
+            //todo trigger ui to celebrate
+            Debug.Log("WOAH TIE! No winner.");
+        }
+        else
+        {
+            Player winner = _roundPlayers[0].score > _roundPlayers[1].score ?
+                _roundPlayers[0].player : _roundPlayers[1].player;
+
+            //todo trigger ui to celebrate
+            Debug.Log("Woohoo!! Winner: " + winner.name);
+        }
+
+        Debug.Log("--------------------------------------------------------------");
     }
 
     private void BuildGrid()
