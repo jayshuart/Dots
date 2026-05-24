@@ -416,6 +416,7 @@ MonoBehaviour:
   gridRowPrefab: {fileID: 2060402095773379547, guid: a41b0a11acc34d546ac7f2b30c5c3dab, type: 3}
   gridRows: 10
   gridColumns: 10
+  roundPlayers: []
 --- !u!224 &752318454 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 128648222735920078, guid: 9c299a0ad4ff12047a4288b8f9f03531, type: 3}
@@ -734,14 +735,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 128648222735920078, guid: 9c299a0ad4ff12047a4288b8f9f03531, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3225350780862219420, guid: 9c299a0ad4ff12047a4288b8f9f03531, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: -150
-      objectReference: {fileID: 0}
-    - target: {fileID: 3225350780862219420, guid: 9c299a0ad4ff12047a4288b8f9f03531, type: 3}
-      propertyPath: m_AnchoredPosition.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8510168193373482246, guid: 9c299a0ad4ff12047a4288b8f9f03531, type: 3}

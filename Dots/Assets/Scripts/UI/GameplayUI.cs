@@ -1,14 +1,16 @@
-using UnityEditor.Build.Content;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameplayUI : MonoBehaviour
 {
     [SerializeField] private Score[] scores;
+    [SerializeField] private Image currentPlayerIndicator;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         RoundManager.I.onRoundReady += onRoundReady;
+        RoundManager.I.onRoundStart += onRoundStart;
         RoundManager.I.onNextTurn += onNextTurn;
         RoundManager.I.onRoundEnd += onRoundEnd;
     }
@@ -24,25 +26,23 @@ public class GameplayUI : MonoBehaviour
         InitPlayers(RoundManager.I.roundPlayers);
     }
 
+    void onRoundStart()
+    {
+        SetCurrentPlayer();
+    }
+
     void onNextTurn(Player player)
     {
         //update scores
         UpdateScores();
 
         //todo: trigger ui transition
+        SetCurrentPlayer();
     }
 
     void onRoundEnd(Player winner)
     {
         UpdateScores();
-    }
-
-    void UpdateScores()
-    {
-        for(int i = 0; i < scores.Length; i++)
-        {
-            scores[i].SetScoreText(RoundManager.I.roundPlayers[i].score);
-        }
     }
 
     void InitPlayers(RoundPlayer[] players)
@@ -57,9 +57,23 @@ public class GameplayUI : MonoBehaviour
         }
     }
 
+    void SetCurrentPlayer()
+    {
+        currentPlayerIndicator.color = RoundManager.I.CurrentPlayer.player.color;
+    }
+
+    void UpdateScores()
+    {
+        for(int i = 0; i < scores.Length; i++)
+        {
+            scores[i].SetScoreText(RoundManager.I.roundPlayers[i].score);
+        }
+    }
+
     void OnDestroy()
     {
         RoundManager.I.onRoundReady -= onRoundReady;
+        RoundManager.I.onRoundStart -= onRoundStart;
         RoundManager.I.onNextTurn -= onNextTurn;
         RoundManager.I.onRoundEnd -= onRoundEnd;
     }

@@ -21,7 +21,6 @@ public class Score : MonoBehaviour
 
     public void SetColour(Color colour)
     {
-        colour.a = backingImage.color.a;
         backingImage.color = colour;
     }
     
