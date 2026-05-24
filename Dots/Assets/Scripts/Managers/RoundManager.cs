@@ -1,3 +1,4 @@
+using System;
 using Unity.Collections;
 using UnityEngine;
 
@@ -16,8 +17,8 @@ public class RoundManager : MonoBehaviour
     [SerializeField] private int gridRows = 10;
     [SerializeField] private int gridColumns = 10;
 
-    //private props
-    private RoundPlayer[] _roundPlayers;
+    //non editor props
+    public RoundPlayer[] roundPlayers;
     private Dot[] _dots;
     private Line[] _lines;
     private BoxFill[] _areas;
@@ -29,7 +30,7 @@ public class RoundManager : MonoBehaviour
     //public get/sets
     public RoundPlayer CurrentPlayer
     {
-        get { return _roundPlayers[_currentPlayerIndex]; }
+        get { return roundPlayers[_currentPlayerIndex]; }
     }
 
     //private get/sets
@@ -42,6 +43,12 @@ public class RoundManager : MonoBehaviour
 
     //make round manager singleton
     public static RoundManager I { get; private set; }
+
+    //events
+    public Action onRoundReady;
+    public Action onRoundStart;
+    public Action<Player> onNextTurn;
+    public Action<Player> onRoundEnd;
 
     private void Awake()
     {
@@ -62,20 +69,25 @@ public class RoundManager : MonoBehaviour
     {
         BuildGrid();
         PrepareRound();
+
+        onRoundStart?.Invoke();
     }
 
     private void PrepareRound()
     {
         //generate players with scoring and extra features from our absic player data
-        _roundPlayers = new RoundPlayer[players.Length];
+        roundPlayers = new RoundPlayer[players.Length];
         for (int i = 0; i < players.Length; i++)
         {
-            _roundPlayers[i] = ScriptableObject.CreateInstance<RoundPlayer>();
-            _roundPlayers[i].player = players[i];
+            roundPlayers[i] = ScriptableObject.CreateInstance<RoundPlayer>();
+            roundPlayers[i].player = players[i];
         }
 
         //determine how many areas are claimable
         _areasLeft = _areas.Length;
+
+        //tell listeners round is ready
+        onRoundReady?.Invoke();
     }
 
     // Update is called once per frame
@@ -94,7 +106,7 @@ public class RoundManager : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             //check if we claimed a valid line
-            Vector2 mouseScreenPos = ClampPosToDots((Vector2) Input.mousePosition);
+            Vector2 mouseScreenPos = ClampPosToDots((Vector2)Input.mousePosition);
 
             (int, bool) successfulLine = ClaimClosestLine(mouseScreenPos.x, mouseScreenPos.y);
             if (!successfulLine.Item2) { return; }
@@ -130,7 +142,8 @@ public class RoundManager : MonoBehaviour
         _currentPlayerIndex = (_currentPlayerIndex + 1) % players.Length;
         Debug.Log("Current Player: " + CurrentPlayer.player.name);
 
-        //todo trigger ui change to showcase this
+        //trigger ui change to showcase this
+        onNextTurn?.Invoke(CurrentPlayer.player);
     }
 
     private void OnScoringMove()
@@ -142,8 +155,9 @@ public class RoundManager : MonoBehaviour
         }
         else
         {
-            //todo trigger ui to celebrate
+            //trigger ui to celebrate
             Debug.Log("Bonus Turn: " + CurrentPlayer.player.name);
+            onNextTurn?.Invoke(CurrentPlayer.player);
         }
     }
 
@@ -151,25 +165,29 @@ public class RoundManager : MonoBehaviour
     {
         Debug.Log("--------------------------------------------------------------");
         Debug.Log("[Final Scores]");
-        Debug.Log("(" + _roundPlayers[0].name + ") " + _roundPlayers[0].score + " || " + _roundPlayers[1].score + " (" + _roundPlayers[1].name + ")");
+        Debug.Log("(" + roundPlayers[0].name + ") " + roundPlayers[0].score + " || " + roundPlayers[1].score + " (" + roundPlayers[1].name + ")");
 
 
         //see who won base don number of areas owned
-        if (_roundPlayers[0].score == _roundPlayers[1].score) //tie
+        if (roundPlayers[0].score == roundPlayers[1].score) //tie
         {
-            //todo trigger ui to celebrate
+            //trigger ui to celebrate
             Debug.Log("WOAH TIE! No winner.");
+            onRoundEnd?.Invoke(null);
         }
         else
         {
-            Player winner = _roundPlayers[0].score > _roundPlayers[1].score ?
-                _roundPlayers[0].player : _roundPlayers[1].player;
+            Player winner = roundPlayers[0].score > roundPlayers[1].score ?
+                roundPlayers[0].player : roundPlayers[1].player;
 
-            //todo trigger ui to celebrate
+            //trigger ui to celebrate
             Debug.Log("Woohoo!! Winner: " + winner.name);
+            onRoundEnd?.Invoke(winner);
         }
 
         Debug.Log("--------------------------------------------------------------");
+
+        
     }
 
     private void BuildGrid()
@@ -352,5 +370,19 @@ public class RoundManager : MonoBehaviour
     private Vector2 ClampPosToDots(Vector2 pos)
     {
         return ClampPosToDots(pos.x, pos.y);
+    }
+
+    // -- Helper Funcs
+    public RoundPlayer GetRoundPlayer(string name)
+    {
+        for (int i = 0; i < roundPlayers.Length; i++)
+        {
+            if (roundPlayers[i].name == name)
+            {
+                return roundPlayers[i];
+            }
+        }
+        
+        return null;
     }
 }
