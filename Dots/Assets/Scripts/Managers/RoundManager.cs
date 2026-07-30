@@ -1,6 +1,7 @@
 using System;
-using Unity.Collections;
 using UnityEngine;
+using UnityEngine.InputSystem.EnhancedTouch;
+using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
 
 public class RoundManager : MonoBehaviour
 {
@@ -63,6 +64,10 @@ public class RoundManager : MonoBehaviour
         }
     }
 
+    void OnEnable() {
+        EnhancedTouchSupport.Enable();
+    }
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -93,20 +98,15 @@ public class RoundManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        CheckMouseInput();
+        CheckInput();
     }
 
-    private void CheckTouchInput()
+    private void CheckInput()
     {
-
-    }
-
-    private void CheckMouseInput()
-    {
-        if (Input.GetMouseButtonDown(0))
+        if (Touch.activeTouches.Count > 0 && Touch.activeTouches[0].isTap)
         {
             //check if we claimed a valid line
-            Vector2 mouseScreenPos = ClampPosToDots((Vector2)Input.mousePosition);
+            Vector2 mouseScreenPos = ClampPosToDots(Touch.activeTouches[0].screenPosition);
 
             (int, bool) successfulLine = ClaimClosestLine(mouseScreenPos.x, mouseScreenPos.y);
             if (!successfulLine.Item2) { return; }

@@ -8,6 +8,7 @@ public class Dot : MonoBehaviour
     private Player _owner;
     public Image _img;
     public Vector2Int coords = new Vector2Int();
+    public RectTransform rt;
 
      /**
         0 - top
@@ -25,6 +26,7 @@ public class Dot : MonoBehaviour
     void Start()
     {
         _img = GetComponent<Image>();
+        rt = GetComponent<RectTransform>();
         connections = new Dot[4]; 
     }
 

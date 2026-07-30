@@ -59,7 +59,6 @@ public class Line : MonoBehaviour
         //calc width/height and if its horizontal or vert- then position and size
         float dist = Vector3.Distance(start.transform.position, end.transform.position);
 
-
         bool isHorizontal = start.transform.position.y == end.transform.position.y;
         Vector3 newPos = start.transform.position;
         if (isHorizontal)
