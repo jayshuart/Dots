@@ -63,14 +63,14 @@ public class Line : MonoBehaviour
         Vector3 newPos = start.transform.position;
         if (isHorizontal)
         {
-            _rt.sizeDelta = new Vector2(dist, _rt.sizeDelta.y);
+            _rt.sizeDelta = new Vector2(dist / RoundManager.I.gameCanvas.scaleFactor, _rt.sizeDelta.y);
             newPos.x = start.transform.position.x < end.transform.position.x ?
                 newPos.x + (dist / 2) :
                 newPos.x - (dist / 2);
         }
         else
         {
-            _rt.sizeDelta = new Vector2(_rt.sizeDelta.y, dist);
+            _rt.sizeDelta = new Vector2(_rt.sizeDelta.y, dist / RoundManager.I.gameCanvas.scaleFactor);
             newPos.y = start.transform.position.y < end.transform.position.y ?
                 newPos.y + (dist / 2) :
                 newPos.y - (dist / 2);

@@ -172,7 +172,7 @@ MonoBehaviour:
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 1080, y: 1920}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 0.5
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -404,6 +404,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c783396ba5e195448334667e815edd9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameCanvas: {fileID: 279158066}
   players:
   - {fileID: 11400000, guid: cb167063e7d4cca43b76cd42404278e4, type: 2}
   - {fileID: 11400000, guid: 108e12cc7224bb1408803cd214ba50de, type: 2}
@@ -772,7 +773,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2882766482282213317, guid: 333d8962bc1237242bb7fef6093f7374, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0.85124034
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2882766482282213317, guid: 333d8962bc1237242bb7fef6093f7374, type: 3}
       propertyPath: m_AnchorMin.x
@@ -780,7 +781,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2882766482282213317, guid: 333d8962bc1237242bb7fef6093f7374, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0.053120144
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2882766482282213317, guid: 333d8962bc1237242bb7fef6093f7374, type: 3}
       propertyPath: m_SizeDelta.x
@@ -788,7 +789,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2882766482282213317, guid: 333d8962bc1237242bb7fef6093f7374, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 99
+      value: -289
       objectReference: {fileID: 0}
     - target: {fileID: 2882766482282213317, guid: 333d8962bc1237242bb7fef6093f7374, type: 3}
       propertyPath: m_LocalPosition.x
@@ -824,7 +825,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2882766482282213317, guid: 333d8962bc1237242bb7fef6093f7374, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 24.5
+      value: -67.5
       objectReference: {fileID: 0}
     - target: {fileID: 2882766482282213317, guid: 333d8962bc1237242bb7fef6093f7374, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

@@ -5,6 +5,7 @@ using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
 
 public class RoundManager : MonoBehaviour
 {
+    public Canvas gameCanvas;
     public Player[] players;
     [SerializeField] private GameObject dotPrefab;
     [SerializeField] private GameObject linePrefab;
@@ -218,7 +219,7 @@ public class RoundManager : MonoBehaviour
             for (int x = 0; x < gridColumns - 1; x++)
             {
                 BoxFill boxFill = Instantiate(boxFillPrefab, boxFillParent.transform).GetComponent<BoxFill>();
-                boxFill.SetSize(_lineLengthX, _lineLengthY);
+                boxFill.SetSize(_lineLengthX / gameCanvas.scaleFactor, _lineLengthY / gameCanvas.scaleFactor);
 
                 Vector3 pos = _dots[0].transform.position;
                 pos.x += (_lineLengthX / 2) + (_lineLengthX * x);
