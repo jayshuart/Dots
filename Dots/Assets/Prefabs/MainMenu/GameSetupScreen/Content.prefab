@@ -86,14 +86,14 @@ MonoBehaviour:
   m_MinValue: 3
   m_MaxValue: 20
   m_WholeNumbers: 1
-  m_Value: 3
+  m_Value: 10
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: GameSetup, Assembly-CSharp
         m_MethodName: OnRowsChange
-        m_Mode: 4
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -1332,14 +1332,14 @@ MonoBehaviour:
   m_MinValue: 3
   m_MaxValue: 20
   m_WholeNumbers: 1
-  m_Value: 3
+  m_Value: 10
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: GameSetup, Assembly-CSharp
         m_MethodName: OnColumnsChange
-        m_Mode: 4
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -1642,6 +1642,30 @@ PrefabInstance:
     - target: {fileID: 116993548811526542, guid: 0e30279e331114647940ba9de473aaa4, type: 3}
       propertyPath: m_Name
       value: Player1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2236856689150069130, guid: 0e30279e331114647940ba9de473aaa4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2236856689150069130, guid: 0e30279e331114647940ba9de473aaa4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2236856689150069130, guid: 0e30279e331114647940ba9de473aaa4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2236856689150069130, guid: 0e30279e331114647940ba9de473aaa4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnClickColorBtn
+      objectReference: {fileID: 0}
+    - target: {fileID: 2236856689150069130, guid: 0e30279e331114647940ba9de473aaa4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: GameSetup, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 2236856689150069130, guid: 0e30279e331114647940ba9de473aaa4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 6302702442426813231, guid: 0e30279e331114647940ba9de473aaa4, type: 3}
       propertyPath: m_Pivot.x
