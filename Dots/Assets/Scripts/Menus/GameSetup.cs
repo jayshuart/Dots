@@ -88,11 +88,13 @@ public class GameSetup : MonoBehaviour
     public void OnColumnsChange(float value)
     {
         columnsText.text = value.ToString();
+        SettingsData.gridColumns = (int) value;
     }
 
     public void OnRowsChange(float value)
     {
         rowsText.text = value.ToString();
+        SettingsData.gridRows = (int) value;
     }
     
     // --- Navigation

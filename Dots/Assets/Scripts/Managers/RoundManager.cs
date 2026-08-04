@@ -16,14 +16,15 @@ public class RoundManager : MonoBehaviour
     [SerializeField] private GameObject lineParent;
     [SerializeField] private GameObject boxFillParent;
     [SerializeField] private GameObject gridRowPrefab;
-    [SerializeField] private int gridRows = 10;
-    [SerializeField] private int gridColumns = 10;
 
     //non editor props
     public RoundPlayer[] roundPlayers;
     private Dot[] _dots;
     private Line[] _lines;
     private BoxFill[] _areas;
+
+    private int _gridRows;
+    private int _gridColumns;
 
     //round control propers
     private int _currentPlayerIndex = 0;
@@ -40,7 +41,7 @@ public class RoundManager : MonoBehaviour
         get { return Mathf.Abs(_dots[1].transform.position.x - _dots[0].transform.position.x);  }
     }
     private float _lineLengthY{
-        get { return Mathf.Abs(_dots[gridRows].transform.position.y - _dots[0].transform.position.y);  }
+        get { return Mathf.Abs(_dots[_gridRows].transform.position.y - _dots[0].transform.position.y);  }
     }
 
     //make round manager singleton
@@ -73,6 +74,10 @@ public class RoundManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        //get set grid
+        _gridRows = SettingsData.gridRows;
+        _gridColumns = SettingsData.gridColumns;
+
         BuildGrid();
         PrepareRound();
 
@@ -194,14 +199,14 @@ public class RoundManager : MonoBehaviour
     private void BuildGrid()
     {
         //build dots
-        _dots = new Dot[gridRows * gridColumns];
-        for (int y = 0; y < gridRows; y++)
+        _dots = new Dot[_gridRows * _gridColumns];
+        for (int y = 0; y < _gridRows; y++)
         {
             GameObject row = Instantiate(gridRowPrefab, gridParent.transform);
-            for (int x = 0; x < gridColumns; x++)
+            for (int x = 0; x < _gridColumns; x++)
             {
                 Dot dot = Instantiate(dotPrefab, row.transform).GetComponent<Dot>();
-                _dots[(y * gridRows) + x] = dot;
+                _dots[(y * _gridRows) + x] = dot;
                 dot.SetCoords(x, y);
             }
         }
@@ -210,13 +215,13 @@ public class RoundManager : MonoBehaviour
         UnityEngine.UI.LayoutRebuilder.ForceRebuildLayoutImmediate(this.gridParent.GetComponent<RectTransform>());
 
         //generate lines array, we'll arrange these as players play.
-        _lines = new Line[(2 * gridRows * gridColumns) - gridRows - gridColumns + 1];
+        _lines = new Line[(2 * _gridRows * _gridColumns) - _gridRows - _gridColumns + 1];
 
         //build fill areas to be claimed when all 4 lines are closed.
-        _areas = new BoxFill[(gridRows - 1) * (gridColumns - 1)];
-        for (int y = 0; y < gridRows - 1; y++)
+        _areas = new BoxFill[(_gridRows - 1) * (_gridColumns - 1)];
+        for (int y = 0; y < _gridRows - 1; y++)
         {
-            for (int x = 0; x < gridColumns - 1; x++)
+            for (int x = 0; x < _gridColumns - 1; x++)
             {
                 BoxFill boxFill = Instantiate(boxFillPrefab, boxFillParent.transform).GetComponent<BoxFill>();
                 boxFill.SetSize(_lineLengthX / gameCanvas.scaleFactor, _lineLengthY / gameCanvas.scaleFactor);
@@ -226,7 +231,7 @@ public class RoundManager : MonoBehaviour
                 pos.y -= (_lineLengthY / 2) + (_lineLengthY * y);
                 boxFill.transform.position = pos;
 
-                _areas[(y * (gridRows - 1)) + x] = boxFill;
+                _areas[(y * (_gridRows - 1)) + x] = boxFill;
             }
         }
     }
@@ -290,7 +295,7 @@ public class RoundManager : MonoBehaviour
         int dotX = Mathf.RoundToInt(Mathf.Abs(x - _dots[0].transform.position.x) / _lineLengthX);
         int dotY = Mathf.RoundToInt(Mathf.Abs(y - _dots[0].transform.position.y) / _lineLengthY);
 
-        return _dots[(dotY * gridRows) + dotX];
+        return _dots[(dotY * _gridRows) + dotX];
     }
 
     private Dot GetSecondClosestDotInLine(float x, float y)
@@ -313,7 +318,7 @@ public class RoundManager : MonoBehaviour
             dotY = dotYFloat % 1 > .5 ? (dotY - 1) : (dotY + 1);
         }
 
-        return _dots[(dotY * gridRows) + dotX];
+        return _dots[(dotY * _gridRows) + dotX];
     }
 
     private int GetClosestLineIndex(float x, float y, Dot closestDot = null, Dot secondDot = null)
@@ -326,13 +331,13 @@ public class RoundManager : MonoBehaviour
         {
             dotX = Mathf.RoundToInt(Mathf.Abs(x - _dots[0].transform.position.x - (_lineLengthX / 2)) / _lineLengthX);
             dotY = Mathf.RoundToInt(Mathf.Abs(y - _dots[0].transform.position.y) / _lineLengthY);
-            lineIndex = (dotY * (gridRows - 1)) + dotX;
+            lineIndex = (dotY * (_gridRows - 1)) + dotX;
         }
         else
         {
             dotX = Mathf.RoundToInt(Mathf.Abs(x - _dots[0].transform.position.x) / _lineLengthX);
             dotY = Mathf.RoundToInt(Mathf.Abs(y - _dots[0].transform.position.y - (_lineLengthY / 2)) / _lineLengthY);
-            lineIndex = ((gridRows - 1) * (gridColumns - 1)) + (dotY * gridRows) + dotX;
+            lineIndex = ((_gridRows - 1) * (_gridColumns - 1)) + (dotY * _gridRows) + dotX;
         }
 
         return lineIndex;
@@ -347,7 +352,7 @@ public class RoundManager : MonoBehaviour
     {
         int dotX = Mathf.RoundToInt(Mathf.Abs(x - _areas[0].transform.position.x) / _lineLengthX);
         int dotY = Mathf.RoundToInt(Mathf.Abs(y - _areas[0].transform.position.y) / _lineLengthY);
-        int index = (dotY * (gridRows - 1)) + dotX;
+        int index = (dotY * (_gridRows - 1)) + dotX;
         index = Mathf.Clamp(index, 0, _areas.Length - 1);
         return _areas[index];
     }
