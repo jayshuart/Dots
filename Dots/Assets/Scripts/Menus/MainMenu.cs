@@ -3,15 +3,29 @@ using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
-    [SerializeField] private Button playBtn;
-    [SerializeField] private Button settingsBtn;
+    [Header("Screens")] //todo: expand this into a mor eproper UI system
+    [SerializeField] private GameObject splashScreen;
+    [SerializeField] private GameObject gameSetupScreen;
 
+
+    public static MainMenu I { get; private set; }
+    private void Awake()
+    {
+        if (I != null && I != this)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            I = this;
+            DontDestroyOnLoad(gameObject);
+        }
+    }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        playBtn.onClick.AddListener(OnClickPlay);
-        settingsBtn.onClick.AddListener(OnClickSettings);
+
     }
 
     // Update is called once per frame
@@ -20,13 +34,20 @@ public class MainMenu : MonoBehaviour
 
     }
 
-    public void OnClickPlay()
+    public void GotoSplash()
     {
-        playBtn.interactable = false;
+        splashScreen.SetActive(true);
+        gameSetupScreen.SetActive(false);
+    }
+
+    public void GotoGameSetup()
+    {
+        splashScreen.SetActive(false);
+        gameSetupScreen.SetActive(true);
     }
     
-    public void OnClickSettings()
+    public void GotoSettings()
     {
-        settingsBtn.interactable = false;
+        splashScreen.SetActive(false);
     }
 }

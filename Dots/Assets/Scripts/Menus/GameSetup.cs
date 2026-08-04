@@ -96,10 +96,15 @@ public class GameSetup : MonoBehaviour
         rowsText.text = value.ToString();
         SettingsData.gridRows = (int) value;
     }
-    
+
     // --- Navigation
     public void OnClickStart()
     {
         SceneManager.LoadScene("Gameplay");
+    }
+    
+    public void OnClickBack()
+    {
+        MainMenu.I.GotoSplash();
     }
 }
