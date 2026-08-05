@@ -20,8 +20,16 @@ public class GameOverCtrl : MonoBehaviour
         RoundManager.I.gameCanvas.gameObject.SetActive(false);
         gameOverScreen.SetActive(true);
 
-        winnerName.text = winner.name;
-        background.color = winner.color;
+        if (winner != null)
+        {
+            winnerName.text = winner.name;
+            background.color = winner.color;
+        }
+        else
+        {
+            winnerName.text = "Tie!";
+            background.color = Color.black;
+        }
     }
     
     public void OnClickHome()
