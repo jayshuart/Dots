@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class GameSetup : MonoBehaviour
 {
+    [SerializeField] private Button startBtn;
+
     [Header("Players")]
     [SerializeField] private Player[] players;
     [SerializeField] private Color[] colours;
@@ -15,13 +17,19 @@ public class GameSetup : MonoBehaviour
     [SerializeField] private TextMeshProUGUI columnsText;
     [SerializeField] private TextMeshProUGUI rowsText;
 
+    [Header("Errors")]
+    [SerializeField] private TextMeshProUGUI error;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        for(int i = 0; i < players.Length; i++)
+        for (int i = 0; i < players.Length; i++)
         {
             SetInitialColorBtnColor(i);
+            SetInitialPlayerName(i);
         }
+
+        refreshErrorMessage();
     }
 
     // Update is called once per frame
@@ -31,14 +39,19 @@ public class GameSetup : MonoBehaviour
     }
 
     // --- Player Settings
-    private void SetInitialPlayername(int playerIndex)
+    private void SetInitialPlayerName(int playerIndex)
     {
-
+        nameFields[playerIndex].text = players[playerIndex].name;
     }
 
-    public void SetPlayerName(string playerName)
+    public void OnChangePlayerOneName(string playerName)
     {
-        
+        OnChangePlayerName(playerName, 0);
+    }
+    
+    public void OnChangePlayerTwoName(string playerName)
+    {
+        OnChangePlayerName(playerName, 1);
     }
     
     private void SetInitialColorBtnColor(int playerIndex)
@@ -77,11 +90,13 @@ public class GameSetup : MonoBehaviour
         //set to visual rep and player
         players[playerIndex].color = colours[current];
         buttons[playerIndex].GetComponent<Image>().color = colours[current];
+        refreshErrorMessage();
     }
     
     public void OnChangePlayerName(string playerName, int playerIndex)
     {
         players[playerIndex].name = playerName;
+        refreshErrorMessage();
     }
 
     // --- Grid Settings
@@ -94,7 +109,27 @@ public class GameSetup : MonoBehaviour
     public void OnRowsChange(float value)
     {
         rowsText.text = value.ToString();
-        SettingsData.gridRows = (int) value;
+        SettingsData.gridRows = (int)value;
+    }
+
+    // -- Error Messaging
+    private void refreshErrorMessage()
+    {
+
+        if (players[0].color == players[1].color //same colour
+         || players[0].name == players[1].name //same name
+         || players[0].name.Trim() == "" || players[0].name.Trim() == "") //empty names
+        {
+            error.gameObject.SetActive(true);
+            error.text = "Error: empty name, the same name, or the same colour.";
+            startBtn.interactable = false;
+        }
+        else
+        {
+            error.gameObject.SetActive(false);
+            error.text = "";
+            startBtn.interactable = true;
+        }
     }
 
     // --- Navigation

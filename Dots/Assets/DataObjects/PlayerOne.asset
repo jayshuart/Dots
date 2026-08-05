@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 41d6e2584b1875a4cb199da8b4a1a671, type: 3}
-  m_Name: PlayerOne
+  m_Name: 
   m_EditorClassIdentifier: 
   playerName: Player One
-  color: {r: 1, g: 0.305093, b: 0.2295596, a: 1}
+  color: {r: 0, g: 0.58553505, b: 1, a: 1}

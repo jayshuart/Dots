@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: PlayerTwo
   m_EditorClassIdentifier: 
   playerName: Player Two
-  color: {r: 0, g: 0.4189942, b: 1, a: 1}
+  color: {r: 0.601141, g: 0, b: 1, a: 1}
