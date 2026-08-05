@@ -178,7 +178,6 @@ public class RoundManager : MonoBehaviour
         if (roundPlayers[0].score == roundPlayers[1].score) //tie
         {
             //trigger ui to celebrate
-            Debug.Log("WOAH TIE! No winner.");
             onRoundEnd?.Invoke(null);
         }
         else
@@ -187,13 +186,8 @@ public class RoundManager : MonoBehaviour
                 roundPlayers[0].player : roundPlayers[1].player;
 
             //trigger ui to celebrate
-            Debug.Log("Woohoo!! Winner: " + winner.name);
             onRoundEnd?.Invoke(winner);
-        }
-
-        Debug.Log("--------------------------------------------------------------");
-
-        
+        }        
     }
 
     private void BuildGrid()
