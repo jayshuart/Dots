@@ -8,24 +8,21 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private GameObject gameSetupScreen;
 
 
-    public static MainMenu I { get; private set; }
+    public static MainMenu I { get; private set; } //Singleton, but isnt glboal to multiple scenes.
     private void Awake()
     {
         if (I != null && I != this)
         {
-            Destroy(gameObject);
+            Destroy(I);
         }
-        else
-        {
-            I = this;
-            DontDestroyOnLoad(gameObject);
-        }
+        
+        I = this;
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-
+        this.GotoSplash();
     }
 
     // Update is called once per frame
