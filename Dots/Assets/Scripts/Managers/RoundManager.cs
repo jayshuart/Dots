@@ -45,7 +45,7 @@ public class RoundManager : MonoBehaviour
     }
 
     //make round manager singleton
-    public static RoundManager I { get; private set; }
+    public static RoundManager I { get; private set; } //singleton, but dies with the scene
 
     //events
     public Action onRoundReady;
@@ -57,13 +57,9 @@ public class RoundManager : MonoBehaviour
     {
         if (I != null && I != this)
         {
-            Destroy(gameObject);
+            Destroy(I);
         }
-        else
-        {
-            I = this;
-            DontDestroyOnLoad(gameObject);
-        }
+        I = this;
     }
 
     void OnEnable() {
