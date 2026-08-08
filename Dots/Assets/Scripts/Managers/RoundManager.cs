@@ -242,8 +242,6 @@ public class RoundManager : MonoBehaviour
         _lines[lineIndex] = line;
         line.ConnectDots(closestDot, secondDot);
 
-        // secondDot.SetOwner(CurrentPlayer.player);
-        // closestDot.SetOwner(CurrentPlayer.player);
         line.SetOwner(CurrentPlayer.player);
 
         return (lineIndex, true);
@@ -253,6 +251,7 @@ public class RoundManager : MonoBehaviour
     {
         //find closest areas
         BoxFill area = GetClosestArea(x, y);
+        if(area.Owned) { return false; } //cant claim what already has been claimed
 
         //check surrounding lines for being claimed
         Dot[] dots = {
