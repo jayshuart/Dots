@@ -41,7 +41,7 @@ public class RoundManager : MonoBehaviour
         get { return Mathf.Abs(_dots[1].transform.position.x - _dots[0].transform.position.x);  }
     }
     private float _lineLengthY{
-        get { return Mathf.Abs(_dots[_gridRows].transform.position.y - _dots[0].transform.position.y);  }
+        get { return Mathf.Abs(_dots[_gridColumns].transform.position.y - _dots[0].transform.position.y);  }
     }
 
     //make round manager singleton
@@ -196,7 +196,7 @@ public class RoundManager : MonoBehaviour
             for (int x = 0; x < _gridColumns; x++)
             {
                 Dot dot = Instantiate(dotPrefab, row.transform).GetComponent<Dot>();
-                _dots[(y * _gridRows) + x] = dot;
+                _dots[(y * _gridColumns) + x] = dot;
                 dot.SetCoords(x, y);
             }
         }
@@ -221,9 +221,12 @@ public class RoundManager : MonoBehaviour
                 pos.y -= (_lineLengthY / 2) + (_lineLengthY * y);
                 boxFill.transform.position = pos;
 
-                _areas[(y * (_gridRows - 1)) + x] = boxFill;
+                _areas[(y * (_gridColumns - 1)) + x] = boxFill;
             }
         }
+
+        Debug.Log(_lineLengthX);
+        Debug.Log(_lineLengthY);
     }
 
     private (int, bool) ClaimClosestLine(float x, float y)
@@ -283,8 +286,9 @@ public class RoundManager : MonoBehaviour
         //find closest dot
         int dotX = Mathf.RoundToInt(Mathf.Abs(x - _dots[0].transform.position.x) / _lineLengthX);
         int dotY = Mathf.RoundToInt(Mathf.Abs(y - _dots[0].transform.position.y) / _lineLengthY);
-
-        return _dots[(dotY * _gridRows) + dotX];
+        Debug.Log(dotX);
+        Debug.Log(dotY);
+        return _dots[(dotY * _gridColumns) + dotX];
     }
 
     private Dot GetSecondClosestDotInLine(float x, float y)
@@ -307,7 +311,7 @@ public class RoundManager : MonoBehaviour
             dotY = dotYFloat % 1 > .5 ? (dotY - 1) : (dotY + 1);
         }
 
-        return _dots[(dotY * _gridRows) + dotX];
+        return _dots[(dotY * _gridColumns) + dotX];
     }
 
     private int GetClosestLineIndex(float x, float y, Dot closestDot = null, Dot secondDot = null)
@@ -320,13 +324,13 @@ public class RoundManager : MonoBehaviour
         {
             dotX = Mathf.RoundToInt(Mathf.Abs(x - _dots[0].transform.position.x - (_lineLengthX / 2)) / _lineLengthX);
             dotY = Mathf.RoundToInt(Mathf.Abs(y - _dots[0].transform.position.y) / _lineLengthY);
-            lineIndex = (dotY * (_gridRows - 1)) + dotX;
+            lineIndex = (dotY * (_gridColumns - 1)) + dotX;
         }
         else
         {
             dotX = Mathf.RoundToInt(Mathf.Abs(x - _dots[0].transform.position.x) / _lineLengthX);
             dotY = Mathf.RoundToInt(Mathf.Abs(y - _dots[0].transform.position.y - (_lineLengthY / 2)) / _lineLengthY);
-            lineIndex = ((_gridRows - 1) * (_gridColumns - 1)) + (dotY * _gridRows) + dotX;
+            lineIndex = ((_gridRows - 1) * (_gridColumns - 1)) + (dotY * _gridColumns) + dotX;
         }
 
         return lineIndex;
@@ -341,7 +345,7 @@ public class RoundManager : MonoBehaviour
     {
         int dotX = Mathf.RoundToInt(Mathf.Abs(x - _areas[0].transform.position.x) / _lineLengthX);
         int dotY = Mathf.RoundToInt(Mathf.Abs(y - _areas[0].transform.position.y) / _lineLengthY);
-        int index = (dotY * (_gridRows - 1)) + dotX;
+        int index = (dotY * (_gridColumns - 1)) + dotX;
         index = Mathf.Clamp(index, 0, _areas.Length - 1);
         return _areas[index];
     }
