@@ -16,6 +16,8 @@ public class GameSetup : MonoBehaviour
     [Header("Grid")]
     [SerializeField] private TextMeshProUGUI columnsText;
     [SerializeField] private TextMeshProUGUI rowsText;
+    [SerializeField] private Slider columnsSlider;
+    [SerializeField] private Slider rowsSlider;
 
     [Header("Errors")]
     [SerializeField] private TextMeshProUGUI error;
@@ -28,6 +30,8 @@ public class GameSetup : MonoBehaviour
             SetInitialColorBtnColor(i);
             SetInitialPlayerName(i);
         }
+
+        SetInitialGridSize();
 
         refreshErrorMessage();
     }
@@ -92,7 +96,7 @@ public class GameSetup : MonoBehaviour
         buttons[playerIndex].GetComponent<Image>().color = colours[current];
         refreshErrorMessage();
     }
-    
+
     public void OnChangePlayerName(string playerName, int playerIndex)
     {
         players[playerIndex].name = playerName;
@@ -100,6 +104,11 @@ public class GameSetup : MonoBehaviour
     }
 
     // --- Grid Settings
+    private void SetInitialGridSize()
+    {
+        columnsSlider.value = SettingsData.gridColumns;
+        rowsSlider.value = SettingsData.gridRows;
+    }
     public void OnColumnsChange(float value)
     {
         columnsText.text = value.ToString();
