@@ -45,7 +45,7 @@ public class GameSetup : MonoBehaviour
     // --- Player Settings
     private void SetInitialPlayerName(int playerIndex)
     {
-        nameFields[playerIndex].text = players[playerIndex].name;
+        nameFields[playerIndex].text = players[playerIndex].playerName;
     }
 
     public void OnChangePlayerOneName(string playerName)
@@ -99,7 +99,7 @@ public class GameSetup : MonoBehaviour
 
     public void OnChangePlayerName(string playerName, int playerIndex)
     {
-        players[playerIndex].name = playerName;
+        players[playerIndex].playerName = playerName;
         refreshErrorMessage();
     }
 
@@ -126,8 +126,8 @@ public class GameSetup : MonoBehaviour
     {
 
         if (players[0].color == players[1].color //same colour
-         || players[0].name == players[1].name //same name
-         || players[0].name.Trim() == "" || players[0].name.Trim() == "") //empty names
+         || players[0].playerName == players[1].playerName //same name
+         || players[0].playerName.Trim() == "" || players[0].playerName.Trim() == "") //empty names
         {
             error.gameObject.SetActive(true);
             error.text = "Error: empty name, the same name, or the same colour.";

@@ -22,7 +22,7 @@ public class GameOverCtrl : MonoBehaviour
 
         if (winner != null)
         {
-            winnerName.text = winner.name;
+            winnerName.text = winner.playerName;
             background.color = winner.color;
         }
         else

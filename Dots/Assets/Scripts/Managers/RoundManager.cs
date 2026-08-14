@@ -142,7 +142,7 @@ public class RoundManager : MonoBehaviour
     private void StartNextPlayerTurn()
     {
         _currentPlayerIndex = (_currentPlayerIndex + 1) % players.Length;
-        Debug.Log("Current Player: " + CurrentPlayer.player.name);
+        Debug.Log("Current Player: " + CurrentPlayer.player.playerName);
 
         //trigger ui change to showcase this
         onNextTurn?.Invoke(CurrentPlayer.player);
@@ -158,7 +158,7 @@ public class RoundManager : MonoBehaviour
         else
         {
             //trigger ui to celebrate
-            Debug.Log("Bonus Turn: " + CurrentPlayer.player.name);
+            Debug.Log("Bonus Turn: " + CurrentPlayer.player.playerName);
             onNextTurn?.Invoke(CurrentPlayer.player);
         }
     }
@@ -167,7 +167,7 @@ public class RoundManager : MonoBehaviour
     {
         Debug.Log("--------------------------------------------------------------");
         Debug.Log("[Final Scores]");
-        Debug.Log("(" + roundPlayers[0].name + ") " + roundPlayers[0].score + " || " + roundPlayers[1].score + " (" + roundPlayers[1].name + ")");
+        Debug.Log("(" + roundPlayers[0].player.playerName + ") " + roundPlayers[0].score + " || " + roundPlayers[1].score + " (" + roundPlayers[1].player.playerName + ")");
 
 
         //see who won base don number of areas owned
@@ -354,7 +354,7 @@ public class RoundManager : MonoBehaviour
     private void GivePoint(RoundPlayer player)
     {
         CurrentPlayer.score++;
-        Debug.Log(CurrentPlayer.player.name + " Score: " + CurrentPlayer.score);
+        Debug.Log(CurrentPlayer.player.playerName + " Score: " + CurrentPlayer.score);
     }
 
     // -- Helper funs
@@ -376,7 +376,7 @@ public class RoundManager : MonoBehaviour
     {
         for (int i = 0; i < roundPlayers.Length; i++)
         {
-            if (roundPlayers[i].name == name)
+            if (roundPlayers[i].player.playerName == name)
             {
                 return roundPlayers[i];
             }
