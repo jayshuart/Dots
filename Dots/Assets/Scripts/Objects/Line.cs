@@ -11,6 +11,7 @@ public class Line : MonoBehaviour
     private Image _img;
     private Dot[] _dotAnchors;
     private RectTransform _rt;
+    private Animator _animator;
 
     public bool Owned
     {
@@ -33,6 +34,7 @@ public class Line : MonoBehaviour
         _img = GetComponent<Image>();
         _rt = GetComponent<RectTransform>();
         _dotAnchors = new Dot[2];
+        _animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
