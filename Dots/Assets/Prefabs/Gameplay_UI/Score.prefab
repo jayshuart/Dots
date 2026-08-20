@@ -98,7 +98,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 1
+  m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -223,6 +223,7 @@ GameObject:
   - component: {fileID: 8289647213759692385}
   - component: {fileID: 7925471427131424659}
   - component: {fileID: 4711156035446956664}
+  - component: {fileID: 2571966886985649340}
   m_Layer: 5
   m_Name: Score
   m_TagString: Untagged
@@ -304,3 +305,25 @@ MonoBehaviour:
   backingImage: {fileID: 7925471427131424659}
   bar: {fileID: 8712616392701073372}
   scoreText: {fileID: 39217534217044822}
+--- !u!95 &2571966886985649340
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8961666148627340557}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 456a2314494524e44994aa727c527181, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
