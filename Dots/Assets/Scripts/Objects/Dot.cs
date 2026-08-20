@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System.Threading.Tasks;
 
 [RequireComponent(typeof(Image))]
 public class Dot : MonoBehaviour
@@ -9,6 +10,7 @@ public class Dot : MonoBehaviour
     public Image _img;
     public Vector2Int coords = new Vector2Int();
     public RectTransform rt;
+    private Animator _animator;
 
      /**
         0 - top
@@ -27,6 +29,7 @@ public class Dot : MonoBehaviour
     {
         _img = GetComponent<Image>();
         rt = GetComponent<RectTransform>();
+        _animator = GetComponent<Animator>();
         connections = new Dot[4]; 
     }
 
@@ -47,7 +50,7 @@ public class Dot : MonoBehaviour
         _owner = owner;
         _img.color = _owner.color;
     }
-    
+
     public void Connect(Dot connection)
     {
         int index;
@@ -61,5 +64,16 @@ public class Dot : MonoBehaviour
         }
 
         connections[index] = connection;
+    }
+
+    public async Task PlayAnimSpawn(float delay = 0)
+    {
+        await Awaitable.WaitForSecondsAsync(delay);
+        _animator.SetTrigger("Spawn");
+    }
+    
+    public void PlayAnimTap()
+    {
+        _animator.SetTrigger("Tap");
     }
 }

@@ -77,6 +77,7 @@ public class RoundManager : MonoBehaviour
         BuildGrid();
         PrepareRound();
 
+        PlayAnimGridSpawn();
         onRoundStart?.Invoke();
     }
 
@@ -95,6 +96,20 @@ public class RoundManager : MonoBehaviour
 
         //tell listeners round is ready
         onRoundReady?.Invoke();
+    }
+
+    private void PlayAnimGridSpawn()
+    {
+        float delay = (.65f / Mathf.Max(_gridRows, _gridColumns));
+        for (int y = 0; y < _gridRows; y++)
+        {
+            for (int x = 0; x < _gridColumns; x++)
+            {
+                int index = (y * _gridRows) + x;
+                int max = Mathf.Max(x, y);
+                _dots[index].PlayAnimSpawn(delay * max);
+            }
+        }
     }
 
     // Update is called once per frame
