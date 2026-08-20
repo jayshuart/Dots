@@ -5,6 +5,7 @@ using UnityEngine.UI;
 public class Score : MonoBehaviour
 {
     [SerializeField] private Image backingImage;
+    [SerializeField] private Image bar;
     [SerializeField] private TMP_Text scoreText;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -23,9 +24,14 @@ public class Score : MonoBehaviour
     {
         backingImage.color = colour;
     }
-    
+
     public void SetScoreText(int score)
     {
         scoreText.text = score.ToString();
+    }
+    
+    public void SetIsTurn(bool isTurn)
+    {
+        bar.gameObject.SetActive(!isTurn);
     }
 }

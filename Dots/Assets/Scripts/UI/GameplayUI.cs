@@ -4,7 +4,7 @@ using UnityEngine.UI;
 public class GameplayUI : MonoBehaviour
 {
     [SerializeField] private Score[] scores;
-    [SerializeField] private Image currentPlayerIndicator;
+    [SerializeField] private Image[] currentPlayerIndicators;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -59,7 +59,16 @@ public class GameplayUI : MonoBehaviour
 
     void SetCurrentPlayer()
     {
-        currentPlayerIndicator.color = RoundManager.I.CurrentPlayer.player.color;
+        for(int i = 0; i < currentPlayerIndicators.Length; i++)
+        {
+            currentPlayerIndicators[i].color = RoundManager.I.CurrentPlayer.player.color;
+        }
+        
+        for(int i = 0; i < scores.Length; i++)
+        {
+            scores[i].SetIsTurn(RoundManager.I.roundPlayers[i].player == RoundManager.I.CurrentPlayer.player);
+        }
+
     }
 
     void UpdateScores()
