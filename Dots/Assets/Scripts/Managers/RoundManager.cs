@@ -287,6 +287,7 @@ public class RoundManager : MonoBehaviour
         {
             //if so, set owner and return the claim successful
             area.SetOwner(CurrentPlayer.player);
+            area.PlayAnimSpawn();
             _areasLeft--;
             GivePoint(CurrentPlayer);
             return true;

@@ -13,6 +13,7 @@ public class BoxFill : MonoBehaviour
     private Image _img;
     private Dot[] _dotAnchors;
     private RectTransform _rt;
+    private Animator _animator;
 
     public bool Owned
     {
@@ -29,6 +30,7 @@ public class BoxFill : MonoBehaviour
     {
         _img = GetComponent<Image>();
         _rt = GetComponent<RectTransform>();
+        _animator = GetComponent<Animator>();
         _dotAnchors = new Dot[4];
     }
 
@@ -42,12 +44,16 @@ public class BoxFill : MonoBehaviour
     {
         _owner = owner;
         Color color = owner.color;
-        color.a = .75f;
         _img.color = color;
     }
 
     public void SetSize(float width, float height)
     {
         _rt.sizeDelta = new UnityEngine.Vector2(width, height);
+    }
+
+    public void PlayAnimSpawn()
+    {
+        _animator.SetTrigger("Spawn");
     }
 }
