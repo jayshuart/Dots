@@ -64,6 +64,8 @@ public class Dot : MonoBehaviour
         }
 
         connections[index] = connection;
+
+        PlayAnimTap();
     }
 
     public async Task PlayAnimSpawn(float delay = 0)
