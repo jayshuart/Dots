@@ -702,6 +702,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1565991982}
   m_CullTransparentMesh: 1
+--- !u!114 &1842805718 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3718827843993465470, guid: 9c299a0ad4ff12047a4288b8f9f03531, type: 3}
+  m_PrefabInstance: {fileID: 5983103969026969233}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1898343556 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4596617016310061004, guid: 57e396bea968ea54b8d159f041218a06, type: 3}
@@ -954,9 +965,17 @@ PrefabInstance:
       value: -52.690002
       objectReference: {fileID: 0}
     - target: {fileID: 8254066392721873530, guid: 9c299a0ad4ff12047a4288b8f9f03531, type: 3}
+      propertyPath: currentPlayerIndicators.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254066392721873530, guid: 9c299a0ad4ff12047a4288b8f9f03531, type: 3}
       propertyPath: 'currentPlayerIndicators.Array.data[1]'
       value: 
       objectReference: {fileID: 1898343556}
+    - target: {fileID: 8254066392721873530, guid: 9c299a0ad4ff12047a4288b8f9f03531, type: 3}
+      propertyPath: 'currentPlayerIndicators.Array.data[2]'
+      value: 
+      objectReference: {fileID: 1842805718}
     - target: {fileID: 8510168193373482246, guid: 9c299a0ad4ff12047a4288b8f9f03531, type: 3}
       propertyPath: m_Name
       value: HeaderBar
