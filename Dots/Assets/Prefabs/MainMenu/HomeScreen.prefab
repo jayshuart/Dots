@@ -88,6 +88,7 @@ GameObject:
   - component: {fileID: 3828757290231734240}
   - component: {fileID: 7566575209314688722}
   - component: {fileID: 8903564663459618221}
+  - component: {fileID: 6339418740219203141}
   m_Layer: 5
   m_Name: HomeScreen
   m_TagString: Untagged
@@ -193,6 +194,28 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!95 &6339418740219203141
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4169521474217355076}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 547d54ec8392fdc4096afe14cb118363, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &5320893488061901873
 GameObject:
   m_ObjectHideFlags: 0
@@ -204,6 +227,7 @@ GameObject:
   - component: {fileID: 4440054400255728020}
   - component: {fileID: 3163447561810467938}
   - component: {fileID: 3995844458959197086}
+  - component: {fileID: 6343268942214844923}
   m_Layer: 5
   m_Name: website
   m_TagString: Untagged
@@ -329,6 +353,18 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!225 &6343268942214844923
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5320893488061901873}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1001 &5482046093427170508
 PrefabInstance:
   m_ObjectHideFlags: 0
