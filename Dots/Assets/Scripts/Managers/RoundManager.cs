@@ -105,7 +105,7 @@ public class RoundManager : MonoBehaviour
         {
             for (int x = 0; x < _gridColumns; x++)
             {
-                int index = (y * _gridRows) + x;
+                int index = (y * _gridColumns) + x;
                 int max = Mathf.Max(x, y);
                 _dots[index].PlayAnimSpawn(delay * max);
             }
