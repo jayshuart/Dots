@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using System.Collections;
 using UnityEngine.InputSystem.EnhancedTouch;
 using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
 
@@ -73,6 +74,13 @@ public class RoundManager : MonoBehaviour
         //get set grid
         _gridRows = SettingsData.gridRows;
         _gridColumns = SettingsData.gridColumns;
+
+        StartCoroutine("lateStart"); //delay so other have time to subscribe to events
+    }
+
+    private IEnumerator lateStart()
+    {
+        yield return null;
 
         BuildGrid();
         PrepareRound();
