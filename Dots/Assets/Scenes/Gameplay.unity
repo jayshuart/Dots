@@ -426,6 +426,51 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 6198613610615481202, guid: 57e396bea968ea54b8d159f041218a06, type: 3}
   m_PrefabInstance: {fileID: 7595855313664008089}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &885272017
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 885272018}
+  - component: {fileID: 885272019}
+  m_Layer: 5
+  m_Name: PanZoomManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &885272018
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 885272017}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1194394964}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &885272019
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 885272017}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06bc39f354a7bd34c99f68cc5bf852e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  easyZoomLevel: 2
 --- !u!1 &1043085328
 GameObject:
   m_ObjectHideFlags: 0
@@ -583,6 +628,7 @@ Transform:
   m_Children:
   - {fileID: 665883748}
   - {fileID: 1083233546}
+  - {fileID: 885272018}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1360310565 stripped
@@ -952,6 +998,10 @@ PrefabInstance:
       propertyPath: m_text
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2693282613573683373, guid: 9c299a0ad4ff12047a4288b8f9f03531, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -52.690002
+      objectReference: {fileID: 0}
     - target: {fileID: 6298244917874023789, guid: 9c299a0ad4ff12047a4288b8f9f03531, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -1121,6 +1171,18 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: -597975374525850311, guid: 405ef08b9d5d3ab4aaf379c9f20593b2, type: 3}
+    - target: {fileID: 4596617016310061004, guid: 57e396bea968ea54b8d159f041218a06, type: 3}
+      propertyPath: m_Color.b
+      value: 0.6452473
+      objectReference: {fileID: 0}
+    - target: {fileID: 4596617016310061004, guid: 57e396bea968ea54b8d159f041218a06, type: 3}
+      propertyPath: m_Color.g
+      value: 0.6452473
+      objectReference: {fileID: 0}
+    - target: {fileID: 4596617016310061004, guid: 57e396bea968ea54b8d159f041218a06, type: 3}
+      propertyPath: m_Color.r
+      value: 0.91194963
+      objectReference: {fileID: 0}
     - target: {fileID: 6198613610615481202, guid: 57e396bea968ea54b8d159f041218a06, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -1200,6 +1262,34 @@ PrefabInstance:
     - target: {fileID: 6198613610615481202, guid: 57e396bea968ea54b8d159f041218a06, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6528389056592757131, guid: 57e396bea968ea54b8d159f041218a06, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6528389056592757131, guid: 57e396bea968ea54b8d159f041218a06, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6528389056592757131, guid: 57e396bea968ea54b8d159f041218a06, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 885272019}
+    - target: {fileID: 6528389056592757131, guid: 57e396bea968ea54b8d159f041218a06, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6528389056592757131, guid: 57e396bea968ea54b8d159f041218a06, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ToggleEasyZoom
+      objectReference: {fileID: 0}
+    - target: {fileID: 6528389056592757131, guid: 57e396bea968ea54b8d159f041218a06, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: PanZoomManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 6528389056592757131, guid: 57e396bea968ea54b8d159f041218a06, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 6660955103038109456, guid: 57e396bea968ea54b8d159f041218a06, type: 3}
       propertyPath: m_LocalScale.x

@@ -13,7 +13,7 @@ public class RoundManager : MonoBehaviour
     [SerializeField] private GameObject boxFillPrefab;
 
     [Header("Grid Settings")]
-    [SerializeField] private GameObject gridParent;
+    public GameObject gridParent;
     [SerializeField] private GameObject lineParent;
     [SerializeField] private GameObject boxFillParent;
     [SerializeField] private GameObject gridRowPrefab;
@@ -41,8 +41,9 @@ public class RoundManager : MonoBehaviour
     private float _lineLengthX{
         get { return Mathf.Abs(_dots[1].transform.position.x - _dots[0].transform.position.x);  }
     }
-    private float _lineLengthY{
-        get { return Mathf.Abs(_dots[_gridColumns].transform.position.y - _dots[0].transform.position.y);  }
+    private float _lineLengthY
+    {
+        get { return Mathf.Abs(_dots[_gridColumns].transform.position.y - _dots[0].transform.position.y); }
     }
 
     //make round manager singleton
