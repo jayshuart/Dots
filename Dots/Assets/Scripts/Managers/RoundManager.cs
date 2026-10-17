@@ -14,7 +14,7 @@ public class RoundManager : MonoBehaviour
 
     [Header("Grid Settings")]
     public GameObject gridParent;
-    [SerializeField] private RectTransform clickZone;
+    public RectTransform clickZone;
     [SerializeField] private GameObject lineParent;
     [SerializeField] private GameObject boxFillParent;
     [SerializeField] private GameObject gridRowPrefab;
@@ -128,10 +128,15 @@ public class RoundManager : MonoBehaviour
         CheckInput();
     }
 
+    public bool TouchingClickArea(Vector2 clickPos)
+    {
+        return RectTransformUtility.RectangleContainsScreenPoint(clickZone, clickPos);
+    }
+
     private void CheckInput()
     {
         if (Touch.activeTouches.Count > 0 && Touch.activeTouches[0].isTap
-        && RectTransformUtility.RectangleContainsScreenPoint(clickZone, Touch.activeTouches[0].screenPosition))
+            && TouchingClickArea(Touch.activeTouches[0].screenPosition))
         {
             //check if we claimed a valid line
             Vector2 mouseScreenPos = ClampPosToDots(Touch.activeTouches[0].screenPosition);
