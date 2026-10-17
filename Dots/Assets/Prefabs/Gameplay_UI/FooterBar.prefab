@@ -35,8 +35,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -20, y: 20}
-  m_SizeDelta: {x: 100, y: 50}
+  m_AnchoredPosition: {x: -40, y: 20}
+  m_SizeDelta: {x: 70, y: 70}
   m_Pivot: {x: 1, y: 0}
 --- !u!222 &5697109715133008518
 CanvasRenderer:
@@ -66,7 +66,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -8067890418204524876, guid: d3b089508ed33df4380a245008b61008, type: 3}
+  m_Sprite: {fileID: -7095890271823782740, guid: 1ab8909e5c43b444a9e02e8e71fdcc2a, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -119,7 +119,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 3088963480548083130}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: PanZoomManager, Assembly-CSharp
+        m_MethodName: ToggleEasyZoom
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &980624165549461970
 GameObject:
   m_ObjectHideFlags: 0
@@ -147,7 +159,7 @@ RectTransform:
   m_GameObject: {fileID: 980624165549461970}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: -1, y: -1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6198613610615481202}
@@ -178,14 +190,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.91194963, g: 0.6452473, b: 0.6452473, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 2288543839237065930, guid: 3a82427a1b61e25479554d23786d30e8, type: 3}
+  m_Sprite: {fileID: -597975374525850311, guid: 405ef08b9d5d3ab4aaf379c9f20593b2, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
