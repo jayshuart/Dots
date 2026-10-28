@@ -33,6 +33,7 @@ public class PanZoomManager : MonoBehaviour
     void Start()
     {
         ResetZoom(); //always start at default zoom
+        ResetPan(); //awlays start not panned
         _originalPos = RoundManager.I.gridParent.transform.position;
     }
 
